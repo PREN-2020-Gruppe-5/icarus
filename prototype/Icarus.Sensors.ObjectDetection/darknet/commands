@@ -1,0 +1,2 @@
+./uselib data/obj.names yolov3-tiny-traffic_cone.cfg yolov3-tiny-obj_final.weights traffic_cones.mp4
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"

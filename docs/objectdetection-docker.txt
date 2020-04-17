@@ -1,0 +1,25 @@
+Nach dem Builden von Darknet/Yolo folgende Dateien in das Repository aufnehmen in folgender Struktur
+	Icarus.Sensors.ObjectDetection
+		darknet
+			cfg
+				yolov3-tiny-traffic_cone.cfg
+			data
+				obj.data
+				obj.names
+			darknet
+			yolov3-tiny-obj_final.weights
+			
+Sicherstellen dass Dockerfile korrekt ist
+	Build-SDK Image runterladen
+	Restore & Build
+	ARM64 Runtime herunterladen
+	Dependencies installieren
+	Environment-Variable für Linux setzen ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/usr/local/lib"
+	darknet Kompilat kopieren nach /app/darknet
+
+
+
+Dockerfile builden (Wo Dockerfile liegt)
+	docker build -t derungsapp/icarus.objectdetection:latest .
+	docker push derungsapp/icarus.objectdetection:latest
+	
