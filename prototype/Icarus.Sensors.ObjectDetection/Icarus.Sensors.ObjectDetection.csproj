@@ -9,11 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="CliWrap" Version="3.0.0" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="6.2.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Icarus.Common.Contracts\Icarus.Common.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -25,17 +25,27 @@ namespace Icarus.App
                 var objectDetector = new ObjectDetector();
                 objectDetector.SetCallback(detectedObjects =>
                 {
-                    Console.WriteLine("object detected");
+                    foreach (var detectedObject in detectedObjects)
+                    {
+                        Console.WriteLine($"Traffic Cone detected: {detectedObject.Location.ToString()} ({detectedObject.Confidence})");
+                    }
                 });
 
                 return objectDetector;
             });
             
             var serviceProvider = serviceCollection.BuildServiceProvider();
+            var objectDetector = serviceProvider.GetService<ObjectDetector>();
             var motorController = serviceProvider.GetService<MotorController>();
             var distanceSensor = serviceProvider.GetService<DistanceSensor>();
             var tiltSensor = serviceProvider.GetService<TiltSensor>();
             var random = new Random();
+
+
+            _ = Task.Run(() =>
+              {
+                  objectDetector.StartDetection();
+              });
 
             while (true)
             {

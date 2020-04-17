@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Device.I2c;
-using System.Text;
+﻿using System.Device.I2c;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Sensors.Tof
 {
-
     public class DistanceSensor
     {
-        private readonly I2cDevice _tof;
         private readonly VL53L1X _vl;
 
         private DistanceSensor()
         {
-            _tof = I2cDevice.Create(new I2cConnectionSettings(0x1, 0x29));
-            _vl = new VL53L1X(_tof);
+            var tof = I2cDevice.Create(new I2cConnectionSettings(0x1, 0x29));
+            _vl = new VL53L1X(tof);
 
             _vl.init(false);
             _vl.startContinuous(100);

@@ -1,13 +1,7 @@
 ﻿using System.Drawing;
-using System.Collections.Generic;
 
-namespace Icarus.Common.Contracts.Notifications
+namespace Icarus.Sensors.ObjectDetection
 {
-    public class ObjectsDetectedMessage
-    {
-        public List<DetectedObject> Objects { get; set; }
-    }
-
     public class DetectedObject
     {
         public string Name { get; set; }

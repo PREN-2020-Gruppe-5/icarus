@@ -1,12 +1,15 @@
 Be aware that PWMs on Jetson only have 8 bit duty cycle precision and the period is a 13 bit divider from 187.5kHz, so the actual values will be approximate.
 
+sudo su
+cd /usr/lib/initramfs-tools/bin
+
 # (All commands as root, use sudo if needed)
 # Enable Pin 32 / PWM0
-sudo busybox devmem 0x700031fc 32 0x45
-sudo busybox devmem 0x6000d504 32 0x2
+sudo ./busybox devmem 0x700031fc 32 0x45
+sudo ./busybox devmem 0x6000d504 32 0x2
 
 # Enable Pin 33 / PWM2
-sudo busybox devmem 0x70003248 32 0x46
-sudo busybox devmem 0x6000d100 32 0x00
+sudo ./busybox devmem 0x70003248 32 0x46
+sudo ./busybox devmem 0x6000d100 32 0x00
 
 

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Buffers.Binary;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Device.I2c;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+
 // ReSharper disable InconsistentNaming
 
 namespace Icarus.Sensors.Tof
@@ -47,19 +44,6 @@ namespace Icarus.Sensors.Tof
                 Thread.Sleep(10);
             }
 
-
-            //// VL53L1_poll_for_boot_completion() end
-
-            //// VL53L1_software_reset() end
-
-            //// VL53L1_DataInit() begin
-
-            //// sensor uses 1V8 mode for I/O by default; switch to 2V8 mode if necessary
-            //if (io_2v8)
-            //{
-            //    //writeReg(PAD_I2C_HV__EXTSUP_CONFIG,
-            //    //  readReg(PAD_I2C_HV__EXTSUP_CONFIG) | 0x01);
-            //}
 
             //// store oscillator info for later use
             fast_osc_frequency = readReg16Bit(regAddr.OSC_MEASURED__FAST_OSC__FREQUENCY);
@@ -175,14 +159,10 @@ namespace Icarus.Sensors.Tof
 
         enum DistanceMode { Short, Medium, Long, Unknown };
 
-
         // set distance mode to Short, Medium, or Long
         // based on VL53L1_SetDistanceMode()
         bool setDistanceMode(DistanceMode mode)
         {
-            // save existing timing budget
-            //UInt32 budget_us = getMeasurementTimingBudget();
-
             switch (mode)
             {
                 case DistanceMode.Short:
@@ -238,37 +218,12 @@ namespace Icarus.Sensors.Tof
                     return false;
             }
 
-            // reapply timing budget
-           // setMeasurementTimingBudget(budget_us);
-
             // save mode so it can be returned by getDistanceMode()
             distance_mode = mode;
 
             return true;
         }
-
-        //// Get the measurement timing budget in microseconds
-        //// based on VL53L1_SetMeasurementTimingBudgetMicroSeconds()
-        //UInt32 getMeasurementTimingBudget()
-        //{
-        //    // assumes PresetMode is LOWPOWER_AUTONOMOUS and these sequence steps are
-        //    // enabled: VHV, PHASECAL, DSS1, RANGE
-
-        //    // VL53L1_get_timeouts_us() begin
-
-        //    // "Update Macro Period for Range A VCSEL Period"
-        //    UInt32 macro_period_us = calcMacroPeriod(readReg(regAddr.RANGE_CONFIG__VCSEL_PERIOD_A));
-
-        //    // "Get Range Timing A timeout"
-
-        //    UInt32 range_config_timeout_us = timeoutMclksToMicroseconds(decodeTimeout(readReg16Bit(RANGE_CONFIG__TIMEOUT_MACROP_A)), macro_period_us);
-
-        //    // VL53L1_get_timeouts_us() end
-
-        //    return 2 * range_config_timeout_us + TimingGuard;
-        //}
-
-
+        
         byte[] readRegVariable(regAddr regAddr, int n)
         {
 
@@ -283,42 +238,17 @@ namespace Icarus.Sensors.Tof
             return outArray.ToArray();
         }
 
-
         // Read an 8-bit register
         byte readReg(regAddr regAddr)
         {
-
             return readRegVariable(regAddr, 1)[0];
-
-            //Span<byte> regAddrBytes = stackalloc byte[2];
-            //Span<byte> outArray = stackalloc byte[1];
-            //BinaryPrimitives.WriteUInt16BigEndian(regAddrBytes, (ushort)regAddr);
-
-            //_i2C.WriteRead(regAddrBytes, outArray);
-
-            //return outArray[0];
         }
-
-
-
 
         UInt16 readReg16Bit(regAddr regAddr)
         {
 
             return BinaryPrimitives.ReadUInt16BigEndian(readRegVariable(regAddr, 2));
-
-            //Thread.Sleep(1);
-
-            //Span<byte> outArray = stackalloc byte[2];
-            //var reg = new byte[2];
-            //reg[0] = (byte)(((ushort)regAddr >> 8) & 0xFF); // reg high byte
-            //reg[1] = (byte)((ushort)regAddr & 0xFF);
-
-            //_i2C.WriteRead(reg, outArray);
-
-            //return BinaryPrimitives.ReadUInt16BigEndian(outArray);
         }
-
 
         void writeReg(regAddr regAddr, byte[] values)
         {
@@ -329,14 +259,10 @@ namespace Icarus.Sensors.Tof
             _i2C.Write(regAddrBytes.ToArray().Concat(values).ToArray());
         }
 
-
         void writeReg(regAddr reg, byte value)
         {
             writeReg(reg, new[] { value });
-
-            //_i2C.Write(regToByte(reg).Concat(new[] { value }).ToArray());
         }
-
 
         void writeReg16Bit(regAddr reg, ushort value)
         {
@@ -346,7 +272,6 @@ namespace Icarus.Sensors.Tof
             writeReg(reg, valueArray.ToArray());
         }
 
-
         void writeReg32Bit(regAddr reg, UInt32 value)
         {
             Span<byte> valueArray = stackalloc byte[4];
@@ -354,7 +279,5 @@ namespace Icarus.Sensors.Tof
 
             writeReg(reg, valueArray.ToArray());
         }
-
     }
-
 }

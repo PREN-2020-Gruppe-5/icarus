@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using CliWrap;
 using CliWrap.EventStream;
-using Icarus.Common.Contracts.Notifications;
 
 namespace Icarus.Sensors.ObjectDetection
 {
@@ -20,6 +19,7 @@ namespace Icarus.Sensors.ObjectDetection
 
         public async void StartDetection()
         {
+            Console.WriteLine("Starting ObjectDetection with params 'detector demo data/obj.data cfg/yolov3-tiny-traffic_cone.cfg yolov3-tiny-obj_final.weights -dont_show -ext_output traffic_cones.mp4'");
             var darknetYolo = Cli.Wrap("/app/darknet/darknet")
             .WithArguments("detector demo data/obj.data cfg/yolov3-tiny-traffic_cone.cfg yolov3-tiny-obj_final.weights -dont_show -ext_output traffic_cones.mp4")
             .WithWorkingDirectory("/app/darknet");
@@ -35,7 +35,7 @@ namespace Icarus.Sensors.ObjectDetection
                         break;
 
                     case StandardOutputCommandEvent stdOut:
-                        Console.WriteLine($"Out> {stdOut.Text}");
+                        //Console.WriteLine($"Out> {stdOut.Text}");
 
                         if (stdOut.Text.Contains("trafficcone"))
                         {
@@ -67,11 +67,11 @@ namespace Icarus.Sensors.ObjectDetection
                         break;
 
                     case StandardErrorCommandEvent stdErr:
-                        Console.WriteLine($"Err> {stdErr.Text}");
+                        //Console.WriteLine($"Err> {stdErr.Text}");
                         break;
 
                     case ExitedCommandEvent exited:
-                        Console.WriteLine($"Process exited; Code: {exited.ExitCode}");
+                        //Console.WriteLine($"Process exited; Code: {exited.ExitCode}");
                         break;
                 }
             }

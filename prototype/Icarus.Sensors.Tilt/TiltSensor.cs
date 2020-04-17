@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Device.I2c;
-using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Sensors.Tilt
 {
-
     public class TiltResult
     {
         public double GyroscopeX { get; set; }
