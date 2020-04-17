@@ -4,35 +4,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Sensors.Tilt
 {
-    public class TiltResult
+    public class TiltSensor : ITiltSensor
     {
-        public double GyroscopeX { get; set; }
-        public double GyroscopeY { get; set; }
-        public double GyroscopeZ { get; set; }
-
-        public double AccelerationX { get; set; }
-        public double AccelerationY { get; set; }
-        public double AccelerationZ { get; set; }
-
-        public double RotationX { get; set; }
-        public double RotationY { get; set; }
-    }
-
-    public class TiltSensor
-    {
-        static I2cDevice _i2C;
-        static byte power_mgmt_1 = 0x6b;
-        static byte power_mgmt_2 = 0x6c;
+        private static I2cDevice _i2C;
+        private const byte PowerMgmt1 = 0x6b;
 
         private TiltSensor()
         {
             _i2C = I2cDevice.Create(new I2cConnectionSettings(0x1, 0x68));
-            _i2C.Write(new ReadOnlySpan<byte>(new[] { power_mgmt_1, (byte)0x00 }));
+            _i2C.Write(new ReadOnlySpan<byte>(new[] { PowerMgmt1, (byte)0x00 }));
         }
         
         public static void Initialize(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton(new TiltSensor());
+            serviceCollection.AddSingleton<ITiltSensor>(new TiltSensor());
         }
 
         public TiltResult GetTilt()
@@ -40,10 +25,6 @@ namespace Icarus.Sensors.Tilt
             var gyroscopeX = read_word_2c(0x43);
             var gyroscopeY = read_word_2c(0x45);
             var gyroscopeZ = read_word_2c(0x47);
-
-            Console.WriteLine($"x: {Math.Round(gyroscopeX / 131d, 2)}");
-            Console.WriteLine($"y: {Math.Round(gyroscopeY / 131d, 2)}");
-            Console.WriteLine($"z: {Math.Round(gyroscopeZ / 131d, 2)}");
 
             var acceleartionX = read_word_2c(0x3b);
             var accelerationY = read_word_2c(0x3d);
@@ -53,21 +34,14 @@ namespace Icarus.Sensors.Tilt
             var accelerationYScaled = accelerationY / 16384.0;
             var acceleartionZScaled = accelerationZ / 16384.0;
 
-            Console.WriteLine($"x {Math.Round(accelerationXScaled, 2)}");
-            Console.WriteLine($"y {Math.Round(accelerationYScaled, 2)}");
-            Console.WriteLine($"z {Math.Round(acceleartionZScaled, 2)}");
-
-            Console.WriteLine($"X Rotation {Math.Round(get_x_rotation(accelerationXScaled, accelerationYScaled, acceleartionZScaled), 2)}");
-            Console.WriteLine($"Y Rotation {Math.Round(get_y_rotation(accelerationXScaled, accelerationYScaled, acceleartionZScaled), 2)}");
-
             return new TiltResult
             {
-                GyroscopeX = gyroscopeX,
-                GyroscopeY = gyroscopeY,
-                GyroscopeZ = gyroscopeZ,
-                AccelerationX = accelerationXScaled,
-                AccelerationY = accelerationYScaled,
-                AccelerationZ = acceleartionZScaled,
+                GyroscopeX = Math.Round(gyroscopeX / 131d, 2),
+                GyroscopeY = Math.Round(gyroscopeY / 131d, 2),
+                GyroscopeZ = Math.Round(gyroscopeZ / 131d, 2),
+                AccelerationX = Math.Round(accelerationXScaled, 2),
+                AccelerationY = Math.Round(accelerationYScaled, 2),
+                AccelerationZ = Math.Round(acceleartionZScaled, 2),
                 RotationX = Math.Round(get_x_rotation(accelerationXScaled, accelerationYScaled, acceleartionZScaled), 2),
                 RotationY = Math.Round(get_y_rotation(accelerationXScaled, accelerationYScaled, acceleartionZScaled), 2)
             };

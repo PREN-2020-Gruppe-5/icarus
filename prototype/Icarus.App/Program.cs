@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Data;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Icarus.Actuators.Motor;
 using Icarus.Sensors.ObjectDetection;
@@ -10,104 +13,92 @@ namespace Icarus.App
 {
     class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var serviceCollection = new ServiceCollection();
-            
-            Console.WriteLine("starting");
 
-            MotorController.Initialize(serviceCollection);
-            DistanceSensor.Initialize(serviceCollection);
-            TiltSensor.Initialize(serviceCollection);
-
-            serviceCollection.AddSingleton(p =>
+            // check for running software on linux arm64 (nvidia jetson). if so, register real sensor drivers
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.OSArchitecture == Architecture.Arm64)
             {
-                var objectDetector = new ObjectDetector();
-                objectDetector.SetCallback(detectedObjects =>
+                Console.WriteLine("Running on Nvidia Jetson. Initialize drivers...");
+
+                MotorController.Initialize(serviceCollection);
+                DistanceSensor.Initialize(serviceCollection);
+                TiltSensor.Initialize(serviceCollection);
+                serviceCollection.AddSingleton(p =>
                 {
-                    foreach (var detectedObject in detectedObjects)
+                    var detector = new ObjectDetector();
+                    detector.SetCallback(detectedObjects =>
                     {
-                        Console.WriteLine($"Traffic Cone detected: {detectedObject.Location.ToString()} ({detectedObject.Confidence})");
-                    }
+                        foreach (var detectedObject in detectedObjects)
+                        {
+                            Console.WriteLine($"Traffic Cone detected: {detectedObject.Location.ToString()} ({detectedObject.Confidence})");
+                        }
+                    });
+
+                    return detector;
                 });
-
-                return objectDetector;
-            });
-            
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-            var objectDetector = serviceProvider.GetService<ObjectDetector>();
-            var motorController = serviceProvider.GetService<MotorController>();
-            var distanceSensor = serviceProvider.GetService<DistanceSensor>();
-            var tiltSensor = serviceProvider.GetService<TiltSensor>();
-            var random = new Random();
-
-
-            _ = Task.Run(() =>
-              {
-                  objectDetector.StartDetection();
-              });
-
-            while (true)
+            }
+            else
             {
-
-                var distance = distanceSensor.GetDistance();
-                Console.WriteLine($"Distance: {distance}mm");
-
-                var tilt = tiltSensor.GetTilt();
-                Console.WriteLine($"Acceleration X: {tilt.AccelerationX}");
-                Console.WriteLine($"Acceleration Y: {tilt.AccelerationY}");
-                Console.WriteLine($"Acceleration Z: {tilt.AccelerationZ}");
-                Console.WriteLine($"Gyroscope X: {tilt.GyroscopeX}");
-                Console.WriteLine($"Gyroscope Y: {tilt.GyroscopeY}");
-                Console.WriteLine($"Gyroscope Z: {tilt.GyroscopeZ}");
-                Console.WriteLine($"Rotation X: {tilt.RotationX}");
-                Console.WriteLine($"Rotation Y: {tilt.RotationY}");
-
-                motorController.SetLeft(random.NextDouble());
-                motorController.SetRight(random.NextDouble());
-
-                await Task.Delay(100);
+                Console.WriteLine("Running on development machine. Registering fake services...");
+                serviceCollection.AddTransient<ITiltSensor, ConfigurableTiltSensor>();
+                serviceCollection.AddSingleton<ITiltConfiguration, TiltConfiguration>();
+                serviceCollection.AddSingleton<IObjectDetector>(new RandomObjectDetector());
             }
 
-            //serviceCollection.AddMassTransit(x =>
-            //{
-            //    x.AddConsumer<TofConsumer>();
-            //    x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
-            //    {
-            //        cfg.Host("icarus.rabbitmq");
-            //        cfg.ConfigureEndpoints(provider);
-            //    }));
-            //});
+            var cancellationTokenSource = new CancellationTokenSource();
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var objectDetector = serviceProvider.GetService<IObjectDetector>();
+            var tiltSensor = serviceProvider.GetService<ITiltSensor>();
+            var tiltConfiguration = serviceProvider.GetService<ITiltConfiguration>();
 
-            //var serviceProvider = serviceCollection.BuildServiceProvider();
+            // this task simulates driving over an obstacle every 11.5 sec.
+            var tiltSimulationTask = Task.Run(async () =>
+            {
+                while (!cancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    tiltConfiguration.SetTilt(VehicleOrientation.Flat);
+                    await Task.Delay(TimeSpan.FromSeconds(5), cancellationTokenSource.Token);
 
-            //var busControl = serviceProvider.GetService<IBusControl>();
+                    await tiltConfiguration.SetTilt(VehicleOrientation.ClimbingUpObstacle, TimeSpan.FromSeconds(1));
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationTokenSource.Token);
 
-            //await busControl.StartAsync();
+                    await tiltConfiguration.SetTilt(VehicleOrientation.Flat, TimeSpan.FromSeconds(1));
+                    await Task.Delay(TimeSpan.FromSeconds(0.5), cancellationTokenSource.Token);
 
-            //while (true)
-            //{
-            //    await Task.Delay(100);
-            //}
+                    await tiltConfiguration.SetTilt(VehicleOrientation.ClimbingDownObstacle, TimeSpan.FromSeconds(1));
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationTokenSource.Token);
+
+                    await tiltConfiguration.SetTilt(VehicleOrientation.Flat, TimeSpan.FromSeconds(1));
+                }
+            }, cancellationTokenSource.Token);
+
+            objectDetector.SetCallback(detectedObjects =>
+            {
+                for (var i = 0; i < 5; i++)
+                {
+                    ConsoleHelper.WriteString($"Detected Object {i}", detectedObjects.Count <= i ? string.Empty : $"{detectedObjects[i].Location.ToString()} ({detectedObjects[i].Confidence:F})");
+                }
+            });
+
+            // start object detection after 500ms
+            var objectDetectionTask = Task.Delay(500, cancellationTokenSource.Token)
+                .ContinueWith(a => objectDetector.RunDetectionAsync(string.Empty, CancellationToken.None), cancellationTokenSource.Token);
+
+            var reportingTask = Task.Run(async () =>
+            {
+                while (!cancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    var tilt = tiltSensor.GetTilt();
+                    ConsoleHelper.WriteDouble("Rotation X", tilt.RotationX);
+                    ConsoleHelper.WriteDouble("Rotation Y", tilt.RotationY);
+
+                    await Task.Delay(200, cancellationTokenSource.Token);
+                }
+            }, cancellationTokenSource.Token);
+
+            await Task.WhenAll(tiltSimulationTask, objectDetectionTask, reportingTask);
         }
     }
-
-    //public class TofConsumer : IConsumer<TofUpdatedNotification>
-    //{
-    //    private readonly IBusControl _busControl;
-
-    //    public TofConsumer(IBusControl busControl)
-    //    {
-    //        _busControl = busControl;
-    //    }
-
-    //    public Task Consume(ConsumeContext<TofUpdatedNotification> context)
-    //    {
-    //        var distance = context.Message.DistanceMillimeters;
-
-    //        _busControl.Publish(new SetMotorSpeedRequest { Left = distance <= 150 ? 0 : 0.5, Right = 0 });
-
-    //        return TaskUtil.Completed;
-    //    }
-    //}
 }

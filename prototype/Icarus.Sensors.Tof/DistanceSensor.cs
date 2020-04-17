@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Sensors.Tof
 {
-    public class DistanceSensor
+    public class DistanceSensor : IDistanceSensor
     {
         private readonly VL53L1X _vl;
 
@@ -19,7 +19,7 @@ namespace Icarus.Sensors.Tof
 
         public static void Initialize(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton(new DistanceSensor());
+            serviceCollection.AddSingleton<IDistanceSensor>(new DistanceSensor());
         }
 
         public double GetDistance()

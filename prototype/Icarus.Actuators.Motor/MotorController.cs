@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Actuators.Motor
 {
-    public class MotorController : IDisposable
+    public class MotorController : IMotorController, IDisposable
     {
         private readonly PwmChannel _left;
         private readonly PwmChannel _right;
@@ -64,7 +64,7 @@ namespace Icarus.Actuators.Motor
             // right
             var left = PwmChannel.Create(0, 0, 20000, 0.2);
 
-            serviceCollection.AddSingleton(p => new MotorController(left, right, gpio));
+            serviceCollection.AddSingleton<IMotorController>(p => new MotorController(left, right, gpio));
             serviceCollection.AddSingleton(gpio);
         }
 
