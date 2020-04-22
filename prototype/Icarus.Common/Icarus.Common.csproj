@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Icarus.Actuators.Motor\Icarus.Actuators.Motor.csproj" />
     <ProjectReference Include="..\Icarus.Sensors.Tilt\Icarus.Sensors.Tilt.csproj" />
   </ItemGroup>
 

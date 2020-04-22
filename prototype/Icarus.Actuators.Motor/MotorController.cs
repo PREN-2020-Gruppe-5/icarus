@@ -35,10 +35,20 @@ namespace Icarus.Actuators.Motor
             _left.DutyCycle = Math.Abs(speed);
         }
 
+        public double GetLeft()
+        {
+            return _left.DutyCycle;
+        }
+
         public void SetRight(double speed)
         { 
             SetMotorDirectionRight(speed < 0 ? MotorDirection.Backward : MotorDirection.Forward);
             _right.DutyCycle = Math.Abs(speed);
+        }
+
+        public double GetRight()
+        {
+            return _right.DutyCycle;
         }
 
 

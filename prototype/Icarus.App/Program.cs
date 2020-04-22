@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Icarus.Actuators.Motor;
+using Icarus.Sensors.Motor;
 using Icarus.Sensors.ObjectDetection;
 using Icarus.Sensors.Tilt;
 using Icarus.Sensors.Tof;
@@ -42,9 +43,11 @@ namespace Icarus.App
             else
             {
                 Console.WriteLine("Running on development machine. Registering fake services...");
+                serviceCollection.AddSingleton<IMotorController, SimulatedMotorController>();
+                serviceCollection.AddSingleton<IHallEffectSensorService, SimulatedHallEffectSensorService>();
                 serviceCollection.AddTransient<ITiltSensor, ConfigurableTiltSensor>();
                 serviceCollection.AddSingleton<ITiltConfiguration, TiltConfiguration>();
-                serviceCollection.AddSingleton<IObjectDetector>(new RandomObjectDetector());
+                serviceCollection.AddSingleton<IObjectDetector, RandomObjectDetector>();
             }
 
             var cancellationTokenSource = new CancellationTokenSource();
@@ -52,6 +55,11 @@ namespace Icarus.App
             var objectDetector = serviceProvider.GetService<IObjectDetector>();
             var tiltSensor = serviceProvider.GetService<ITiltSensor>();
             var tiltConfiguration = serviceProvider.GetService<ITiltConfiguration>();
+            var motorController = serviceProvider.GetService<IMotorController>();
+            var hallEffectSensorService = serviceProvider.GetService<IHallEffectSensorService>();
+
+            motorController.SetLeft(1);
+            motorController.SetRight(1);
 
             // this task simulates driving over an obstacle every 11.5 sec.
             var tiltSimulationTask = Task.Run(async () =>
@@ -90,6 +98,9 @@ namespace Icarus.App
             {
                 while (!cancellationTokenSource.Token.IsCancellationRequested)
                 {
+                    ConsoleHelper.WriteDouble("RPM Right", hallEffectSensorService.GetWheelRpm(WheelLocation.Right));
+                    ConsoleHelper.WriteDouble("RPM Left", hallEffectSensorService.GetWheelRpm(WheelLocation.Left));
+
                     var tilt = tiltSensor.GetTilt();
                     ConsoleHelper.WriteDouble("Rotation X", tilt.RotationX);
                     ConsoleHelper.WriteDouble("Rotation Y", tilt.RotationY);

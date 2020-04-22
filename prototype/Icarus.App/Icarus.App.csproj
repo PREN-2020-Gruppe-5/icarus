@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Icarus.Actuators.Motor\Icarus.Actuators.Motor.csproj" />
+    <ProjectReference Include="..\Icarus.Common\Icarus.Common.csproj" />
+    <ProjectReference Include="..\Icarus.Sensors.Motor\Icarus.Sensors.Motor.csproj" />
     <ProjectReference Include="..\Icarus.Sensors.ObjectDetection\Icarus.Sensors.ObjectDetection.csproj" />
     <ProjectReference Include="..\Icarus.Sensors.Tilt\Icarus.Sensors.Tilt.csproj" />
     <ProjectReference Include="..\Icarus.Sensors.Tof\Icarus.Sensors.Tof.csproj" />

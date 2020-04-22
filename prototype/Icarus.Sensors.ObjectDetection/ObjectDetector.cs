@@ -37,7 +37,7 @@ namespace Icarus.Sensors.ObjectDetection
 
                 if (stdOut.Text.Contains("trafficcone"))
                 {
-                    var numbers = Regex.Matches(stdOut.Text, "[0-9]{1,4}").Select(p => Convert.ToInt32(p.Value)).ToArray();
+                    var numbers = Regex.Matches(stdOut.Text, "[0-9]{1,4}").OfType<Match>().Select(p => Convert.ToInt32(p.Value)).ToArray();
 
                     var confidence = (double)numbers[0] / 100;
                     var x = numbers[1];
