@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Icarus.Actuators.Motor;
+using Icarus.Common;
 using Icarus.Sensors.Motor;
 using Icarus.Sensors.ObjectDetection;
 using Icarus.Sensors.Tilt;
@@ -23,7 +24,7 @@ namespace Icarus.App
             {
                 Console.WriteLine("Running on Nvidia Jetson. Initialize drivers...");
 
-                MotorController.Initialize(serviceCollection);
+                MotorActor.Initialize(serviceCollection);
                 DistanceSensor.Initialize(serviceCollection);
                 TiltSensor.Initialize(serviceCollection);
                 serviceCollection.AddSingleton(p =>
@@ -43,8 +44,8 @@ namespace Icarus.App
             else
             {
                 Console.WriteLine("Running on development machine. Registering fake services...");
-                serviceCollection.AddSingleton<IMotorController, SimulatedMotorController>();
-                serviceCollection.AddSingleton<IHallEffectSensorService, SimulatedHallEffectSensorService>();
+                serviceCollection.AddSingleton<IMotorActor, SimulatedMotorActor>();
+                serviceCollection.AddSingleton<IHallEffectController, SimulatedHallEffectController>();
                 serviceCollection.AddTransient<ITiltSensor, ConfigurableTiltSensor>();
                 serviceCollection.AddSingleton<ITiltConfiguration, TiltConfiguration>();
                 serviceCollection.AddSingleton<IObjectDetector, RandomObjectDetector>();
@@ -55,8 +56,8 @@ namespace Icarus.App
             var objectDetector = serviceProvider.GetService<IObjectDetector>();
             var tiltSensor = serviceProvider.GetService<ITiltSensor>();
             var tiltConfiguration = serviceProvider.GetService<ITiltConfiguration>();
-            var motorController = serviceProvider.GetService<IMotorController>();
-            var hallEffectSensorService = serviceProvider.GetService<IHallEffectSensorService>();
+            var motorController = serviceProvider.GetService<IMotorActor>();
+            var hallEffectSensorService = serviceProvider.GetService<IHallEffectController>();
 
             motorController.SetLeft(1);
             motorController.SetRight(1);

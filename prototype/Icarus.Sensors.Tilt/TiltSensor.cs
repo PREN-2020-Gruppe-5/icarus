@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Device.I2c;
+using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Sensors.Tilt
@@ -55,6 +56,8 @@ namespace Icarus.Sensors.Tilt
             regAddrBytes[0] = reg;
 
             _i2C.WriteRead(regAddrBytes, outArray);
+
+            Thread.Sleep(1);
 
             return outArray.ToArray()[0];
 

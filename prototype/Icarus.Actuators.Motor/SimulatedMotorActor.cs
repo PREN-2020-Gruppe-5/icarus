@@ -1,6 +1,6 @@
 ﻿namespace Icarus.Actuators.Motor
 {
-    public class SimulatedMotorController : IMotorController
+    public class SimulatedMotorActor : IMotorActor
     {
         private double _speedLeft = 0;
         private double _speedRight = 0;

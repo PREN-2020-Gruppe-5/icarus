@@ -1,6 +1,6 @@
 ﻿namespace Icarus.Actuators.Motor
 {
-    public interface IMotorController
+    public interface IMotorActor
     {
         void SetLeft(double speed);
         void SetRight(double speed);

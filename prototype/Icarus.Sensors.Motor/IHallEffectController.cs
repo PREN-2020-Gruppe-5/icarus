@@ -2,7 +2,7 @@
 
 namespace Icarus.Sensors.Motor
 {
-    public interface IHallEffectSensorService
+    public interface IHallEffectController
     {
         int GetWheelRpm(WheelLocation wheel);
     }

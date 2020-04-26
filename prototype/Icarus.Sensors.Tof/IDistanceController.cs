@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Icarus.Sensors.Tof
 {
-    public interface IDistanceSensor
+    public interface IDistanceController
     {
         double GetDistanceMillimeters();
     }

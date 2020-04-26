@@ -6,13 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Actuators.Motor
 {
-    public class MotorController : IMotorController, IDisposable
+    public class MotorActor : IMotorActor, IDisposable
     {
         private readonly PwmChannel _left;
         private readonly PwmChannel _right;
         private readonly GpioController _gpio;
 
-        private MotorController(PwmChannel left, PwmChannel right, GpioController gpio)
+        private MotorActor(PwmChannel left, PwmChannel right, GpioController gpio)
         {
             _left = left;
             _right = right;
@@ -21,8 +21,14 @@ namespace Icarus.Actuators.Motor
             _gpio.OpenPin(77, PinMode.Output);        // M1INA motor 1 direction A
             _gpio.OpenPin(78, PinMode.Output);        // M1INB motor 1 direction B
 
-            // initial state forward left. right not implemented yet
+            _gpio.OpenPin(79, PinMode.Output);        // M1INA motor 2 direction A
+            _gpio.OpenPin(80, PinMode.Output);        // M1INB motor 2 direction B
+
+            // initial state forward
             _gpio.Write(77, PinValue.High);
+            _gpio.Write(78, PinValue.Low);
+
+            _gpio.Write(79, PinValue.High);
             _gpio.Write(78, PinValue.Low);
 
             _left.Start();
@@ -50,8 +56,7 @@ namespace Icarus.Actuators.Motor
         {
             return _right.DutyCycle;
         }
-
-
+        
         private void SetMotorDirectionLeft(MotorDirection direction)
         {
             _gpio.Write(77, direction == MotorDirection.Forward ? PinValue.High : PinValue.Low);
@@ -60,29 +65,30 @@ namespace Icarus.Actuators.Motor
 
         private void SetMotorDirectionRight(MotorDirection direction)
         {
-            // not implemented/wired yet
+            _gpio.Write(79, direction == MotorDirection.Forward ? PinValue.High : PinValue.Low);
+            _gpio.Write(80, direction == MotorDirection.Forward ? PinValue.Low : PinValue.High);
         }
-
 
         public static void Initialize(IServiceCollection serviceCollection)
         {
             var gpio = new GpioController(PinNumberingScheme.Logical, new SysFsDriver());
-
+            
             // left
             var right = PwmChannel.Create(0, 2, 20000, 0.2);
 
             // right
             var left = PwmChannel.Create(0, 0, 20000, 0.2);
 
-            serviceCollection.AddSingleton<IMotorController>(p => new MotorController(left, right, gpio));
+            serviceCollection.AddSingleton<IMotorActor>(p => new MotorActor(left, right, gpio));
             serviceCollection.AddSingleton(gpio);
         }
-
 
         public void Dispose()
         {
             _gpio?.ClosePin(77);
             _gpio?.ClosePin(78);
+            _gpio?.ClosePin(79);
+            _gpio?.ClosePin(80);
             _left?.Dispose();
             _right?.Dispose();
             _gpio?.Dispose();
