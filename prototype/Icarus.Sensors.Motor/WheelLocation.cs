@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Icarus.Sensors.Motor
+﻿namespace Icarus.Sensors.HallEffect
 {
     public enum WheelLocation
     {

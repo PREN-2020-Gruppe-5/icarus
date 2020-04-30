@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Icarus.Sensors.ObjectDetection
 {
-    public class RandomObjectDetector : IObjectDetector
+    public class RandomObjectDetectionSensor : IObjectDetectionSensor
     {
-        private Action<List<DetectedObject>> _detectedObjectCallback;
+        private Action<List<DetectedObject>> detectedObjectCallback;
 
         public void SetCallback(Action<List<DetectedObject>> callback)
         {
-            _detectedObjectCallback = callback;
+            this.detectedObjectCallback = callback;
         }
 
         public async Task RunDetectionAsync(string videoFileName, CancellationToken cancellationToken)
@@ -42,7 +42,7 @@ namespace Icarus.Sensors.ObjectDetection
                         });
                     }
 
-                    _detectedObjectCallback?.Invoke(detectedObjects.ToList());
+                    this.detectedObjectCallback?.Invoke(detectedObjects.ToList());
 
                     await Task.Delay(100, cancellationToken);
                 }

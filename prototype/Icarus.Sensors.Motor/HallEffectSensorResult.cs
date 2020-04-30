@@ -1,4 +1,4 @@
-﻿namespace Icarus.Sensors.Motor
+﻿namespace Icarus.Sensors.HallEffect
 {
     public class HallEffectSensorResult
     {

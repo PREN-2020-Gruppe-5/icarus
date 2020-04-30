@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Icarus.Common;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Actuators.Motor.ManualTests
 {

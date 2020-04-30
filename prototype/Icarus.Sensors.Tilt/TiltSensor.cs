@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Device.I2c;
 using System.Threading;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Sensors.Tilt
 {
@@ -14,11 +13,6 @@ namespace Icarus.Sensors.Tilt
         {
             _i2C = I2cDevice.Create(new I2cConnectionSettings(0x1, 0x68));
             _i2C.Write(new ReadOnlySpan<byte>(new[] { PowerMgmt1, (byte)0x00 }));
-        }
-        
-        public static void Initialize(IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<ITiltSensor>(new TiltSensor());
         }
 
         public TiltResult GetTilt()
@@ -78,20 +72,20 @@ namespace Icarus.Sensors.Tilt
             return (short)value;
         }
 
-        private static double dist(double a, double b)
+        private static double Dist(double a, double b)
         {
             return Math.Sqrt((a * a) + (b * b));
         }
 
         private static double get_y_rotation(double x, double y, double z)
         {
-            var radians = Math.Atan2(x, dist(y, z));
+            var radians = Math.Atan2(x, Dist(y, z));
             return -((180 / Math.PI) * radians);
         }
 
         private static double get_x_rotation(double x, double y, double z)
         {
-            var radians = Math.Atan2(y, dist(x, z));
+            var radians = Math.Atan2(y, Dist(x, z));
             return (180 / Math.PI) * radians;
         }
 

@@ -10,14 +10,14 @@ using CliWrap.EventStream;
 
 namespace Icarus.Sensors.ObjectDetection
 {
-    public class ObjectDetector : IObjectDetector
+    public class ObjectDetectionSensor : IObjectDetectionSensor
     {
         private const string DefaultVideoFileName = "traffic_cones.mp4";
-        private Action<List<DetectedObject>> _detectedObjectCallback;
+        private Action<List<DetectedObject>> detectedObjectCallback;
 
         public void SetCallback(Action<List<DetectedObject>> callback)
         {
-            _detectedObjectCallback = callback;
+            this.detectedObjectCallback = callback;
         }
 
         public async Task RunDetectionAsync(string videoFileName = DefaultVideoFileName, CancellationToken cancellationToken = default)
@@ -50,7 +50,7 @@ namespace Icarus.Sensors.ObjectDetection
                 }
                 else if (detectedObjects.Any())
                 {
-                    _detectedObjectCallback?.Invoke(detectedObjects);
+                    this.detectedObjectCallback?.Invoke(detectedObjects);
                     detectedObjects.Clear();
                 }
             }

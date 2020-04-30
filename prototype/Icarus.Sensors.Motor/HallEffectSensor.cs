@@ -3,22 +3,22 @@ using System.Device.Gpio;
 using System.Device.Gpio.Drivers;
 using System.Threading;
 
-namespace Icarus.Sensors.Motor
+namespace Icarus.Sensors.HallEffect
 {
     public class HallEffectSensor : IHallEffectSensor
     {
-        private PinEventTypes _previousPinEventType;
+        private PinEventTypes previousPinEventType;
 
         public HallEffectSensor()
         {
             var gpioController = new GpioController(PinNumberingScheme.Logical, new SysFsDriver());
-            gpioController.RegisterCallbackForPinValueChangedEvent(4, PinEventTypes.Falling | PinEventTypes.Rising, PinValueChanged);
+            gpioController.RegisterCallbackForPinValueChangedEvent(4, PinEventTypes.Falling | PinEventTypes.Rising, this.PinValueChanged);
             gpioController.WaitForEvent(3, PinEventTypes.Falling, CancellationToken.None);
         }
 
         private void PinValueChanged(object sender, PinValueChangedEventArgs pinValueChangedEventArgs)
         {
-            _previousPinEventType = pinValueChangedEventArgs.ChangeType;
+            this.previousPinEventType = pinValueChangedEventArgs.ChangeType;
         }
 
         public HallEffectSensorResult GetHallEffectSensorResult()

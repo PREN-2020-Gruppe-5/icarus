@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Sensors.ObjectDetect
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Sensors.Tilt", "Icarus.Sensors.Tilt\Icarus.Sensors.Tilt.csproj", "{8FF6643E-B5C2-4089-A343-760245B5E04B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Sensors.Motor", "Icarus.Sensors.Motor\Icarus.Sensors.Motor.csproj", "{630D4A32-4F4B-48CE-A4E9-32D4FD00B007}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Sensors.HallEffect", "Icarus.Sensors.Motor\Icarus.Sensors.HallEffect.csproj", "{630D4A32-4F4B-48CE-A4E9-32D4FD00B007}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Common", "Icarus.Common\Icarus.Common.csproj", "{14C5116E-ACC1-4C5F-A514-CC65126075FF}"
 EndProject
@@ -21,19 +21,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{58FA2056-605
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E5E6E6CD-3C9A-456E-AE93-17BC33287D4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icarus.Sensors.Tof.Test", "Icarus.Sensors.Tof.Test\Icarus.Sensors.Tof.Test.csproj", "{B2B6CA9B-9253-4906-9485-034A1791E37E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Sensors.Tof.Test", "Icarus.Sensors.Tof.Test\Icarus.Sensors.Tof.Test.csproj", "{B2B6CA9B-9253-4906-9485-034A1791E37E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tof", "Tof", "{74C86CAA-D145-46CF-AB77-504C7787C58F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icarus.Sensors.Tof.ManualTests", "Icarus.Sensors.Tof.ManualTests\Icarus.Sensors.Tof.ManualTests.csproj", "{2D898BBE-9531-4C10-A736-6683CBC36DB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Sensors.Tof.ManualTests", "Icarus.Sensors.Tof.ManualTests\Icarus.Sensors.Tof.ManualTests.csproj", "{2D898BBE-9531-4C10-A736-6683CBC36DB5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tilt", "Tilt", "{63E5FE5C-E175-443C-A19D-19A06CDA0060}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icarus.Sensors.Tilt.ManualTests", "Icarus.Sensors.Tilt.ManualTests\Icarus.Sensors.Tilt.ManualTests.csproj", "{CB38ACEF-F120-4D8A-8440-4A65A170E150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Sensors.Tilt.ManualTests", "Icarus.Sensors.Tilt.ManualTests\Icarus.Sensors.Tilt.ManualTests.csproj", "{CB38ACEF-F120-4D8A-8440-4A65A170E150}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Motor", "Motor", "{8F35531F-AE26-4A72-B982-812FB6F310B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icarus.Actuators.Motor.ManualTests", "Icarus.Actuators.Motor.ManualTests\Icarus.Actuators.Motor.ManualTests.csproj", "{6ABD9257-31C2-4618-A507-280532620282}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Actuators.Motor.ManualTests", "Icarus.Actuators.Motor.ManualTests\Icarus.Actuators.Motor.ManualTests.csproj", "{6ABD9257-31C2-4618-A507-280532620282}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

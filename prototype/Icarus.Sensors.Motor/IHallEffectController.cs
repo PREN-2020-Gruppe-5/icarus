@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Icarus.Sensors.Motor
+﻿namespace Icarus.Sensors.HallEffect
 {
     public interface IHallEffectController
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Icarus.Common;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Sensors.Tof.ManualTests
 {
@@ -27,22 +26,22 @@ namespace Icarus.Sensors.Tof.ManualTests
 
 #if !DEBUG
             var serviceCollection = new ServiceCollection();
-            DistanceSensor.Initialize(serviceCollection);
+            TofSensor.Initialize(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            var distanceSensor = serviceProvider.GetService<IDistanceSensor>();
+            var tofSensor = serviceProvider.GetService<ITofSensor>();
 #else
-            IDistanceSensor distanceSensor = null;
+            ITofSensor tofSensor = null;
 #endif
 
-            TestDistanceSensor(distanceSensor, 1000, 100);
-            TestDistanceSensor(distanceSensor, 500, 50);
-            TestDistanceSensor(distanceSensor, 300, 50);
-            TestDistanceSensor(distanceSensor, 0, 0);
+            TestDistanceSensor(tofSensor, 1000, 100);
+            TestDistanceSensor(tofSensor, 500, 50);
+            TestDistanceSensor(tofSensor, 300, 50);
+            TestDistanceSensor(tofSensor, 0, 0);
         }
 
         private static int _testNumber = 1;
 
-        private static void TestDistanceSensor(IDistanceSensor distanceSensor, double expected, double tolerance)
+        private static void TestDistanceSensor(ITofSensor tofSensor, double expected, double tolerance)
         {
             // for debug purpose only
             var random = new Random();
@@ -51,11 +50,11 @@ namespace Icarus.Sensors.Tof.ManualTests
 
             Console.WriteLine();
             ConsoleHelper.WriteLine($"Test {_testNumber}", ConsoleColor.Yellow);
-            Console.WriteLine($"Place an obstacle, your hand or a wall about {expected}mm away from the DistanceSensor");
+            Console.WriteLine($"Place an obstacle, your hand or a wall about {expected}mm away from the TofSensor");
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
-            var distance = distanceSensor?.GetDistanceMillimeters() ?? random.Next((int) min, (int) max);
+            var distance = tofSensor?.GetDistanceMillimeters() ?? random.Next((int) min, (int) max);
             Console.WriteLine($"Expected distance: {expected}mm. Actual distance: {distance}mm. Tolerance: +{tolerance}/-{tolerance}");
 
             if (distance <= expected + tolerance && distance >= expected - tolerance)

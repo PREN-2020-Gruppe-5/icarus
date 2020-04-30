@@ -1,7 +1,7 @@
 ﻿using Icarus.Actuators.Motor;
 using Icarus.Sensors.Tilt;
 
-namespace Icarus.Sensors.Motor
+namespace Icarus.Sensors.HallEffect
 {
     public class SimulatedHallEffectController : IHallEffectController
     {
@@ -11,19 +11,19 @@ namespace Icarus.Sensors.Motor
         private const double WheelCircumferenceMeters = 0.2;
         private const double DefaultSpeedNoFrictionFlatMetersPerSecond = 0.5;
 
-        private readonly IMotorActor _motorActor;
-        private readonly ITiltSensor _tiltSensor;
+        private readonly IMotorActor motorActor;
+        private readonly ITiltSensor tiltSensor;
 
         public SimulatedHallEffectController(IMotorActor motorActor, ITiltSensor tiltSensor)
         {
-            _motorActor = motorActor;
-            _tiltSensor = tiltSensor;
+            this.motorActor = motorActor;
+            this.tiltSensor = tiltSensor;
         }
 
         public int GetWheelRpm(WheelLocation wheel)
         {
-            var tiltResult = _tiltSensor.GetTilt();
-            var rpm = ConvertPwmToRpm(wheel == WheelLocation.Left ? _motorActor.GetLeft() : _motorActor.GetRight());
+            var tiltResult = this.tiltSensor.GetTilt();
+            var rpm = ConvertPwmToRpm(wheel == WheelLocation.Left ? this.motorActor.GetLeft() : this.motorActor.GetRight());
 
             // using a simulated formula to calcualte actual RPM for example when climbing an obstacle
             // 45 degrees = only 20% of normal speed. angles over 55 degrees are not climbable and speed is 0

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Icarus.Sensors.ObjectDetection
 {
-    public interface IObjectDetector
+    public interface IObjectDetectionSensor
     {
         void SetCallback(Action<List<DetectedObject>> callback);
         Task RunDetectionAsync(string videoFileName, CancellationToken cancellationToken);

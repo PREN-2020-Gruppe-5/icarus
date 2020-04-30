@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Threading;
 using Icarus.Common;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Icarus.Sensors.Tilt.ManualTests
 {
