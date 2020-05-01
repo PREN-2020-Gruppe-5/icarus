@@ -35,6 +35,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Motor", "Motor", "{8F35531F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Actuators.Motor.ManualTests", "Icarus.Actuators.Motor.ManualTests\Icarus.Actuators.Motor.ManualTests.csproj", "{6ABD9257-31C2-4618-A507-280532620282}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ObjectDetection", "ObjectDetection", "{826AA72D-69C4-403F-A647-01CB22B311D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icarus.Sensors.ObjectDetection.ManualTests", "Icarus.Sensors.ObjectDetection.ManualTests\Icarus.Sensors.ObjectDetection.ManualTests.csproj", "{95989CA4-880B-4658-8902-02912CB48822}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,6 +181,18 @@ Global
 		{6ABD9257-31C2-4618-A507-280532620282}.Release|x64.Build.0 = Release|Any CPU
 		{6ABD9257-31C2-4618-A507-280532620282}.Release|x86.ActiveCfg = Release|Any CPU
 		{6ABD9257-31C2-4618-A507-280532620282}.Release|x86.Build.0 = Release|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Debug|x64.Build.0 = Debug|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Debug|x86.Build.0 = Debug|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Release|x64.ActiveCfg = Release|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Release|x64.Build.0 = Release|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Release|x86.ActiveCfg = Release|Any CPU
+		{95989CA4-880B-4658-8902-02912CB48822}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -196,6 +212,8 @@ Global
 		{CB38ACEF-F120-4D8A-8440-4A65A170E150} = {63E5FE5C-E175-443C-A19D-19A06CDA0060}
 		{8F35531F-AE26-4A72-B982-812FB6F310B9} = {E5E6E6CD-3C9A-456E-AE93-17BC33287D4B}
 		{6ABD9257-31C2-4618-A507-280532620282} = {8F35531F-AE26-4A72-B982-812FB6F310B9}
+		{826AA72D-69C4-403F-A647-01CB22B311D8} = {E5E6E6CD-3C9A-456E-AE93-17BC33287D4B}
+		{95989CA4-880B-4658-8902-02912CB48822} = {826AA72D-69C4-403F-A647-01CB22B311D8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74317B6D-AF9C-4600-B90F-E96FA3E71A93}

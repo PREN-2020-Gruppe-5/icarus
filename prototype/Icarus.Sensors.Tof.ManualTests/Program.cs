@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Icarus.Common;
+#if !DEBUG
+using Microsoft.Extensions.DependencyInjection;
+#endif
 
 namespace Icarus.Sensors.Tof.ManualTests
 {
@@ -26,7 +29,7 @@ namespace Icarus.Sensors.Tof.ManualTests
 
 #if !DEBUG
             var serviceCollection = new ServiceCollection();
-            TofSensor.Initialize(serviceCollection);
+            TofModule.Initialize(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var tofSensor = serviceProvider.GetService<ITofSensor>();
 #else

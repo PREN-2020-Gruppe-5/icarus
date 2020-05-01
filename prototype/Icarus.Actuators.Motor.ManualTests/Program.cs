@@ -1,9 +1,17 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using Icarus.Common;
+#if !DEBUG
+using Microsoft.Extensions.DependencyInjection;
+#endif
 
 namespace Icarus.Actuators.Motor.ManualTests
 {
+
     class Program
     {
         static void Main(string[] args)
@@ -14,7 +22,7 @@ namespace Icarus.Actuators.Motor.ManualTests
             Console.WriteLine($"This test runs on {RuntimeInformation.OSDescription} {RuntimeInformation.ProcessArchitecture}");
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.ProcessArchitecture != Architecture.Arm64)
             {
-                ConsoleHelper.WriteLine("This manual test is not supported on this machine. \n Please make sure to run the test on the actual device with the sensors wired. \n Press 'c' to continue in debug mode", ConsoleColor.Red);
+                ConsoleHelper.WriteLine("This manual test is not supported on this machine. \nPlease make sure to run the test on the actual device with the sensors wired. \nPress 'c' to continue in debug mode", ConsoleColor.Red);
                 var key = Console.ReadKey();
 
                 if (key.Key != ConsoleKey.C)
@@ -25,13 +33,12 @@ namespace Icarus.Actuators.Motor.ManualTests
 
 #if !DEBUG
             var serviceCollection = new ServiceCollection();
-            MotorActor.Initialize(serviceCollection);
+            MotorModule.Initialize(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var motorActor = serviceProvider.GetService<IMotorActor>();
 #else
             IMotorActor motorActor = null;
 #endif
-
             Console.WriteLine("Press any key to start");
             Console.ReadKey();
 

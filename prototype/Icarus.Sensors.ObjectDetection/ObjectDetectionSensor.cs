@@ -13,6 +13,10 @@ namespace Icarus.Sensors.ObjectDetection
     public class ObjectDetectionSensor : IObjectDetectionSensor
     {
         private const string DefaultVideoFileName = "traffic_cones.mp4";
+        private const string DataFilePath = "data/obj.data";
+        private const string CfgFilePath = "cfg/yolov3-tiny-traffic_cone.cfg";
+        private const string WeightsFilePath = "yolov3-tiny-obj_final.weights";
+
         private Action<List<DetectedObject>> detectedObjectCallback;
 
         public void SetCallback(Action<List<DetectedObject>> callback)
@@ -20,10 +24,20 @@ namespace Icarus.Sensors.ObjectDetection
             this.detectedObjectCallback = callback;
         }
 
-        public async Task RunDetectionAsync(string videoFileName = DefaultVideoFileName, CancellationToken cancellationToken = default)
+        public async Task RunVideoDetectionAsync(string videoFileName = DefaultVideoFileName, CancellationToken cancellationToken = default)
         {
-            var arguments = $"detector demo data/obj.data cfg/yolov3-tiny-traffic_cone.cfg yolov3-tiny-obj_final.weights -dont_show -ext_output {videoFileName}";
-            Console.WriteLine($"Starting ObjectDetection with arguments '{arguments}'");
+            var arguments = $"detector demo {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output {videoFileName}";
+            await RunDetectionAsync(arguments, cancellationToken);
+        }
+
+        public async Task RunPictureDetectionAsync(string pictureFileName, CancellationToken cancellationToken)
+        {
+            var arguments = $"detector test {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output {pictureFileName}";
+            await RunDetectionAsync(arguments, cancellationToken);
+        }
+
+        private async Task RunDetectionAsync(string arguments, CancellationToken cancellationToken)
+        {
             var darknetYolo = Cli.Wrap("/app/darknet/darknet").WithArguments(arguments).WithWorkingDirectory("/app/darknet");
 
             var detectedObjects = new List<DetectedObject>();
@@ -53,6 +67,12 @@ namespace Icarus.Sensors.ObjectDetection
                     this.detectedObjectCallback?.Invoke(detectedObjects);
                     detectedObjects.Clear();
                 }
+            }
+
+            if (detectedObjects.Any())
+            {
+                this.detectedObjectCallback?.Invoke(detectedObjects);
+                detectedObjects.Clear();
             }
         }
     }

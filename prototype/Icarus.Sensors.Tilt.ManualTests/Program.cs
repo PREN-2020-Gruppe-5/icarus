@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Icarus.Common;
+#if !DEBUG
+using Microsoft.Extensions.DependencyInjection;
+#endif
 
 namespace Icarus.Sensors.Tilt.ManualTests
 {
@@ -25,7 +28,7 @@ namespace Icarus.Sensors.Tilt.ManualTests
 
 #if !DEBUG
             var serviceCollection = new ServiceCollection();
-            TiltSensor.Initialize(serviceCollection);
+            TiltModule.Initialize(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var tiltSensor = serviceProvider.GetService<ITiltSensor>();
 #else

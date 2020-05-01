@@ -87,7 +87,7 @@ namespace Icarus.App
 
             //// start object detection after 500ms
             //var objectDetectionTask = Task.Delay(500, cancellationTokenSource.Token)
-            //    .ContinueWith(a => objectDetector.RunDetectionAsync(string.Empty, CancellationToken.None), cancellationTokenSource.Token);
+            //    .ContinueWith(a => objectDetector.RunVideoDetectionAsync(string.Empty, CancellationToken.None), cancellationTokenSource.Token);
 
             //var reportingTask = Task.Run(async () =>
             //{
