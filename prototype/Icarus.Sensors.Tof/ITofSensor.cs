@@ -2,6 +2,6 @@
 {
     public interface ITofSensor
     {
-        double GetDistanceMillimeters();
+        double GetDistanceInMillimeters();
     }
 }

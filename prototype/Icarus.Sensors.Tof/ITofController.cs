@@ -2,6 +2,6 @@
 {
     public interface ITofController
     {
-        double GetDistanceMillimeters();
+        TofResult GetTofResult();
     }
 }

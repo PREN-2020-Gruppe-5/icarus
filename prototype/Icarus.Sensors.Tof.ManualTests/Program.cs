@@ -57,7 +57,7 @@ namespace Icarus.Sensors.Tof.ManualTests
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
-            var distance = tofSensor?.GetDistanceMillimeters() ?? random.Next((int) min, (int) max);
+            var distance = tofSensor?.GetDistanceInMillimeters() ?? random.Next((int) min, (int) max);
             Console.WriteLine($"Expected distance: {expected}mm. Actual distance: {distance}mm. Tolerance: +{tolerance}/-{tolerance}");
 
             if (distance <= expected + tolerance && distance >= expected - tolerance)

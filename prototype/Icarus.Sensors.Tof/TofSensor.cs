@@ -23,7 +23,7 @@ namespace Icarus.Sensors.Tof
             StartContinuous(100);
         }
 
-        public double GetDistanceMillimeters()
+        public double GetDistanceInMillimeters()
         {
             var bytes = ReadRegVariable(RegAddr.ResultRangeStatus, 17);
 
