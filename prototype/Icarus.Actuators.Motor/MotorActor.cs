@@ -6,75 +6,50 @@ namespace Icarus.Actuators.Motor
 {
     public class MotorActor : IMotorActor, IDisposable
     {
-        private readonly PwmChannel left;
-        private readonly PwmChannel right;
+        private readonly PwmChannel pwnChannel;
         private readonly GpioController gpio;
+        private readonly int inaPin;
+        private readonly int inbPin;
 
-        public MotorActor(PwmChannel left, PwmChannel right, GpioController gpio)
+        public MotorActor(PwmChannel pwnChannel, GpioController gpio, int inaPin, int inbPin)
         {
-            this.left = left;
-            this.right = right;
+            this.pwnChannel = pwnChannel;
             this.gpio = gpio;
+            this.inaPin = inaPin;
+            this.inbPin = inbPin;
 
-            this.gpio.OpenPin(77, PinMode.Output);        // M1INA motor 1 direction A
-            this.gpio.OpenPin(78, PinMode.Output);        // M1INB motor 1 direction B
-
-            this.gpio.OpenPin(79, PinMode.Output);        // M1INA motor 2 direction A
-            this.gpio.OpenPin(80, PinMode.Output);        // M1INB motor 2 direction B
+            this.gpio.OpenPin(inaPin, PinMode.Output);        // M1INA motor 1 direction A
+            this.gpio.OpenPin(inbPin, PinMode.Output);        // M1INB motor 1 direction B
 
             // initial state forward
-            this.gpio.Write(77, PinValue.High);
-            this.gpio.Write(78, PinValue.Low);
+            this.gpio.Write(inaPin, PinValue.High);
+            this.gpio.Write(inbPin, PinValue.Low);
 
-            this.gpio.Write(79, PinValue.High);
-            this.gpio.Write(78, PinValue.Low);
-
-            this.left.Start();
-            this.right.Start();
+            this.pwnChannel.Start();
         }
 
-        public void SetLeft(double speed)
+        public void SetSpeed(double speed)
         {
-            SetMotorDirectionLeft(speed < 0 ? MotorDirection.Backward : MotorDirection.Forward);
-            this.left.DutyCycle = Math.Abs(speed);
+            SetMotorDirection(speed < 0 ? MotorDirection.Backward : MotorDirection.Forward);
+            this.pwnChannel.DutyCycle = Math.Abs(speed);
         }
 
-        public double GetLeft()
+        public double GetSpeed()
         {
-            return this.left.DutyCycle;
+            return this.pwnChannel.DutyCycle;
         }
 
-        public void SetRight(double speed)
-        { 
-            SetMotorDirectionRight(speed < 0 ? MotorDirection.Backward : MotorDirection.Forward);
-            this.right.DutyCycle = Math.Abs(speed);
-        }
-
-        public double GetRight()
+        private void SetMotorDirection(MotorDirection direction)
         {
-            return this.right.DutyCycle;
-        }
-        
-        private void SetMotorDirectionLeft(MotorDirection direction)
-        {
-            this.gpio.Write(77, direction == MotorDirection.Forward ? PinValue.High : PinValue.Low);
-            this.gpio.Write(78, direction == MotorDirection.Forward ? PinValue.Low : PinValue.High);
-        }
-
-        private void SetMotorDirectionRight(MotorDirection direction)
-        {
-            this.gpio.Write(79, direction == MotorDirection.Forward ? PinValue.High : PinValue.Low);
-            this.gpio.Write(80, direction == MotorDirection.Forward ? PinValue.Low : PinValue.High);
+            this.gpio.Write(this.inaPin, direction == MotorDirection.Forward ? PinValue.High : PinValue.Low);
+            this.gpio.Write(this.inbPin, direction == MotorDirection.Forward ? PinValue.Low : PinValue.High);
         }
 
         public void Dispose()
         {
-            this.gpio?.ClosePin(77);
-            this.gpio?.ClosePin(78);
-            this.gpio?.ClosePin(79);
-            this.gpio?.ClosePin(80);
-            this.left?.Dispose();
-            this.right?.Dispose();
+            this.gpio?.ClosePin(inaPin);
+            this.gpio?.ClosePin(inbPin);
+            this.pwnChannel?.Dispose();
             this.gpio?.Dispose();
         }
     }

@@ -35,14 +35,14 @@ namespace Icarus.Actuators.Motor.ManualTests
             var serviceCollection = new ServiceCollection();
             MotorModule.Initialize(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            var motorActor = serviceProvider.GetService<IMotorActor>();
+            var motorActors = serviceProvider.GetService<IDirectional<IMotorActor>>();
 #else
-            IMotorActor motorActor = null;
+            IDirectional<IMotorActor> motorActors = null;
 #endif
             Console.WriteLine("Press any key to start");
             Console.ReadKey();
 
-            motorActor?.SetRight(0.5);
+            motorActors?.Right?.SetSpeed(0.5);
             Console.WriteLine("Right motor spinning forward? Press 'Enter' for yes");
             if (Console.ReadKey().Key == ConsoleKey.Enter)
             {
@@ -53,7 +53,7 @@ namespace Icarus.Actuators.Motor.ManualTests
                 ConsoleHelper.WriteLine("Test right motor forward failed", ConsoleColor.Red);
             }
 
-            motorActor?.SetRight(-0.5);
+            motorActors?.Right?.SetSpeed(-0.5);
             Console.WriteLine("Right motor spinning backwards? Press 'Enter' for yes");
             if (Console.ReadKey().Key == ConsoleKey.Enter)
             {
@@ -64,7 +64,7 @@ namespace Icarus.Actuators.Motor.ManualTests
                 ConsoleHelper.WriteLine("Test right motor backwards failed", ConsoleColor.Red);
             }
 
-            motorActor?.SetLeft(0.5);
+            motorActors?.Left?.SetSpeed(0.5);
             Console.WriteLine("Left motor spinning forward? Press 'Enter' for yes");
             if (Console.ReadKey().Key == ConsoleKey.Enter)
             {
@@ -75,7 +75,7 @@ namespace Icarus.Actuators.Motor.ManualTests
                 ConsoleHelper.WriteLine("Test left motor forward failed", ConsoleColor.Red);
             }
 
-            motorActor?.SetLeft(-0.5);
+            motorActors?.Left?.SetSpeed(-0.5);
             Console.WriteLine("Left motor spinning backwards? Press 'Enter' for yes");
             if (Console.ReadKey().Key == ConsoleKey.Enter)
             {
