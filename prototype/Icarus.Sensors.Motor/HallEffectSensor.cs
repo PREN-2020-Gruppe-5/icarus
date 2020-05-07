@@ -30,9 +30,10 @@ namespace Icarus.Sensors.HallEffect
                 DutyCycleA = random.NextDouble(),
                 DutyCycleB = random.NextDouble(),
                 DutyCycleC = random.NextDouble(),
-                FrequencyA = random.Next(15000),
-                FrequencyB = random.Next(15000),
-                FrequencyC = random.Next(15000)
+                Forward = random.NextDouble() > 0.5
+                //FrequencyA = random.Next(15000),
+                //FrequencyB = random.Next(15000),
+                //FrequencyC = random.Next(15000)
             };
         }
     }
