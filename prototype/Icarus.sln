@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Icarus.Sensors.Tof.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icarus.Sensors.Tilt.Tests", "Icarus.Sensors.Tilt.Tests\Icarus.Sensors.Tilt.Tests.csproj", "{D6F4EEFB-AD88-4D95-88D5-7D9285779091}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Icarus.Sensors.ObjectDetection.Tests", "Icarus.Sensors.ObjectDetection.Tests\Icarus.Sensors.ObjectDetection.Tests.csproj", "{9AB74759-01EA-478D-B23D-1739E440C98C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -211,6 +213,18 @@ Global
 		{D6F4EEFB-AD88-4D95-88D5-7D9285779091}.Release|x64.Build.0 = Release|Any CPU
 		{D6F4EEFB-AD88-4D95-88D5-7D9285779091}.Release|x86.ActiveCfg = Release|Any CPU
 		{D6F4EEFB-AD88-4D95-88D5-7D9285779091}.Release|x86.Build.0 = Release|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Debug|x64.Build.0 = Debug|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Debug|x86.Build.0 = Debug|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Release|x64.ActiveCfg = Release|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Release|x64.Build.0 = Release|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Release|x86.ActiveCfg = Release|Any CPU
+		{9AB74759-01EA-478D-B23D-1739E440C98C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -235,6 +249,7 @@ Global
 		{2D915F0F-6BC2-4BFB-A0EA-C2C7ED0627D5} = {E5E6E6CD-3C9A-456E-AE93-17BC33287D4B}
 		{8EECE66F-BEBF-48A0-83CF-0D9F89F22CE7} = {2D915F0F-6BC2-4BFB-A0EA-C2C7ED0627D5}
 		{D6F4EEFB-AD88-4D95-88D5-7D9285779091} = {2D915F0F-6BC2-4BFB-A0EA-C2C7ED0627D5}
+		{9AB74759-01EA-478D-B23D-1739E440C98C} = {2D915F0F-6BC2-4BFB-A0EA-C2C7ED0627D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74317B6D-AF9C-4600-B90F-E96FA3E71A93}

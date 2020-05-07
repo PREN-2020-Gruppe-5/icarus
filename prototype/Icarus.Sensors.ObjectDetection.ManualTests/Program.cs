@@ -39,63 +39,49 @@ namespace Icarus.Sensors.ObjectDetection.ManualTests
             IObjectDetectionSensor objectDetectionSensor = null;
 #endif
 
+            var result = objectDetectionSensor.GetDetectedObjectsFromImage("traffic_cone_1.png");
 
-            objectDetectionSensor.SetCallback(list =>
+            if (result != null && result.Count == 1 && result.All(p => p.Confidence >= 0.8))
             {
-                if (list.Count == 1 && list.All(p => p.Confidence >= 0.8))
-                {
-                    ConsoleHelper.WriteLine("Test 1 passed", ConsoleColor.Green);
-                }
-                else
-                {
-                    ConsoleHelper.WriteLine("Test 1 failed. Expected 1 Object with >= 0.8 confidence", ConsoleColor.Red);
-                }
-            });
-
-            await objectDetectionSensor.RunPictureDetectionAsync("traffic_cone_1.png", cancellationToken);
-
-            objectDetectionSensor.SetCallback(list =>
+                ConsoleHelper.WriteLine("Test 1 passed", ConsoleColor.Green);
+            }
+            else
             {
-                if (list.Count == 8 && list.All(p => p.Confidence >= 0.3))
-                {
-                    ConsoleHelper.WriteLine("Test 2 passed", ConsoleColor.Green);
-                }
-                else
-                {
-                    ConsoleHelper.WriteLine("Test 2 failed. Expected 8 Objects with >= 0.3 confidence", ConsoleColor.Red);
-                }
-            });
+                ConsoleHelper.WriteLine("Test 1 failed. Expected 1 Object with >= 0.8 confidence", ConsoleColor.Red);
+            }
 
-            await objectDetectionSensor.RunPictureDetectionAsync("traffic_cone_2.png", cancellationToken);
+            result = objectDetectionSensor.GetDetectedObjectsFromImage("traffic_cone_2.png");
 
-            objectDetectionSensor.SetCallback(list =>
+            if (result.Count == 8 && result.All(p => p.Confidence >= 0.3))
             {
-                if (list.Count == 1 && list.All(p => p.Confidence >= 0.9))
-                {
-                    ConsoleHelper.WriteLine("Test 3 passed", ConsoleColor.Green);
-                }
-                else
-                {
-                    ConsoleHelper.WriteLine("Test 3 failed. Expected 1 Object with >= 0.9 confidence", ConsoleColor.Red);
-                }
-            });
-
-            await objectDetectionSensor.RunPictureDetectionAsync("traffic_cone_3.png", cancellationToken);
-
-
-            objectDetectionSensor.SetCallback(list =>
+                ConsoleHelper.WriteLine("Test 2 passed", ConsoleColor.Green);
+            }
+            else
             {
-                if (list.Count == 1 && list.All(p => p.Confidence >= 0.3))
-                {
-                    ConsoleHelper.WriteLine("Test 4 passed", ConsoleColor.Green);
-                }
-                else
-                {
-                    ConsoleHelper.WriteLine("Test 4 failed. Expected 1 Object with >= 0.3 confidence", ConsoleColor.Red);
-                }
-            });
+                ConsoleHelper.WriteLine("Test 2 failed. Expected 8 Objects with >= 0.3 confidence", ConsoleColor.Red);
+            }
 
-            await objectDetectionSensor.RunPictureDetectionAsync("traffic_cone_4.png", cancellationToken);
+            result = objectDetectionSensor.GetDetectedObjectsFromImage("traffic_cone_3.png");
+
+            if (result.Count == 1 && result.All(p => p.Confidence >= 0.9))
+            {
+                ConsoleHelper.WriteLine("Test 3 passed", ConsoleColor.Green);
+            }
+            else
+            {
+                ConsoleHelper.WriteLine("Test 3 failed. Expected 1 Object with >= 0.9 confidence", ConsoleColor.Red);
+            }
+
+            result = objectDetectionSensor.GetDetectedObjectsFromImage("traffic_cone_4.png");
+            
+            if (result.Count == 1 && result.All(p => p.Confidence >= 0.3))
+            {
+                ConsoleHelper.WriteLine("Test 4 passed", ConsoleColor.Green);
+            }
+            else
+            {
+                ConsoleHelper.WriteLine("Test 4 failed. Expected 1 Object with >= 0.3 confidence", ConsoleColor.Red);
+            }
         }
     }
 }

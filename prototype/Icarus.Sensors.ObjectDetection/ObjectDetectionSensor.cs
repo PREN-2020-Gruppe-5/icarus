@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using CliWrap;
 using CliWrap.EventStream;
@@ -17,32 +16,32 @@ namespace Icarus.Sensors.ObjectDetection
         private const string CfgFilePath = "cfg/yolov3-tiny-traffic_cone.cfg";
         private const string WeightsFilePath = "yolov3-tiny-obj_final.weights";
 
-        private Action<List<DetectedObject>> detectedObjectCallback;
-
-        public void SetCallback(Action<List<DetectedObject>> callback)
-        {
-            this.detectedObjectCallback = callback;
-        }
-
-        public async Task RunVideoDetectionAsync(string videoFileName = DefaultVideoFileName, CancellationToken cancellationToken = default)
+        public List<DetectedObject> GetDetectedObjectsFromVideo(string videoFileName = DefaultVideoFileName)
         {
             var arguments = $"detector demo {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output {videoFileName}";
-            await RunDetectionAsync(arguments, cancellationToken);
+            return RunDetectionAsync(arguments).GetAwaiter().GetResult();
         }
 
-        public async Task RunPictureDetectionAsync(string pictureFileName, CancellationToken cancellationToken)
+        public List<DetectedObject> GetDetectedObjectsFromImage(string imageFileName)
         {
-            var arguments = $"detector test {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output {pictureFileName}";
-            await RunDetectionAsync(arguments, cancellationToken);
+            var arguments = $"detector test {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output {imageFileName}";
+            return RunDetectionAsync(arguments).GetAwaiter().GetResult();
         }
 
-        private async Task RunDetectionAsync(string arguments, CancellationToken cancellationToken)
+        public List<DetectedObject> GetDetectedObjectsFromCamera()
         {
-            var darknetYolo = Cli.Wrap("/app/darknet/darknet").WithArguments(arguments).WithWorkingDirectory("/app/darknet");
+            var arguments = $"detector test {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output";
+            return RunDetectionAsync(arguments).GetAwaiter().GetResult();
+        }
+
+        private async Task<List<DetectedObject>> RunDetectionAsync(string arguments)
+        {
+            var darknetYolo = Cli.Wrap("/app/darknet/darknet").WithArguments(arguments)
+                .WithWorkingDirectory("/app/darknet");
 
             var detectedObjects = new List<DetectedObject>();
 
-            await foreach (var cmdEvent in darknetYolo.ListenAsync(cancellationToken))
+            await foreach (var cmdEvent in darknetYolo.ListenAsync())
             {
                 if (!(cmdEvent is StandardOutputCommandEvent stdOut))
                 {
@@ -51,29 +50,31 @@ namespace Icarus.Sensors.ObjectDetection
 
                 if (stdOut.Text.Contains("trafficcone"))
                 {
-                    var numbers = Regex.Matches(stdOut.Text, "[0-9]{1,4}").OfType<Match>().Select(p => Convert.ToInt32(p.Value)).ToArray();
+                    var numbers = Regex.Matches(stdOut.Text, "[0-9]{1,4}").OfType<Match>()
+                        .Select(p => Convert.ToInt32(p.Value)).ToArray();
 
-                    var confidence = (double)numbers[0] / 100;
+                    var confidence = (double) numbers[0] / 100;
                     var x = numbers[1];
                     var y = numbers[2];
                     var width = numbers[3];
                     var height = numbers[4];
 
-                    detectedObjects.Add(new DetectedObject { Name = "trafficcone", Confidence = confidence, Location = new Rectangle(x, y, width, height) });
+                    detectedObjects.Add(new DetectedObject
+                        {Name = "Traffic_Cone", Confidence = confidence, Location = new Rectangle(x, y, width, height)});
 
                 }
                 else if (detectedObjects.Any())
                 {
-                    this.detectedObjectCallback?.Invoke(detectedObjects);
                     detectedObjects.Clear();
                 }
             }
 
             if (detectedObjects.Any())
             {
-                this.detectedObjectCallback?.Invoke(detectedObjects);
                 detectedObjects.Clear();
             }
+
+            return detectedObjects;
         }
     }
 }

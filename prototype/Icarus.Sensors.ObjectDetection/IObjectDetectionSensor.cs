@@ -7,8 +7,8 @@ namespace Icarus.Sensors.ObjectDetection
 {
     public interface IObjectDetectionSensor
     {
-        void SetCallback(Action<List<DetectedObject>> callback);
-        Task RunVideoDetectionAsync(string videoFileName, CancellationToken cancellationToken);
-        Task RunPictureDetectionAsync(string pictureFileName, CancellationToken cancellationToken);
+        List<DetectedObject> GetDetectedObjectsFromCamera();
+        List<DetectedObject> GetDetectedObjectsFromVideo(string videoFileName);
+        List<DetectedObject> GetDetectedObjectsFromImage(string imageFileName);
     }
 }

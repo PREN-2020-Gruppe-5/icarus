@@ -58,5 +58,19 @@ namespace Icarus.Sensors.ObjectDetection
             this.detectedObjectCallback?.Invoke(detectedObjects.ToList());
         }
 
+        public List<DetectedObject> GetDetectedObjectsFromCamera()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DetectedObject> GetDetectedObjectsFromVideo(string videoFileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DetectedObject> GetDetectedObjectsFromImage(string imageFileName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
