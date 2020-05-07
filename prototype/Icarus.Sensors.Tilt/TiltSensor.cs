@@ -15,34 +15,24 @@ namespace Icarus.Sensors.Tilt
             _i2C.Write(new ReadOnlySpan<byte>(new[] { PowerMgmt1, (byte)0x00 }));
         }
 
-        public TiltResult GetTilt()
+        public RotationResult GetRotationResult()
         {
-            var gyroscopeX = read_word_2c(0x43);
-            var gyroscopeY = read_word_2c(0x45);
-            var gyroscopeZ = read_word_2c(0x47);
+            var xAcceleration = ReadWord2C(0x3b);
+            var yAcceleration = ReadWord2C(0x3d);
+            var zAcceleration = ReadWord2C(0x3f);
 
-            var acceleartionX = read_word_2c(0x3b);
-            var accelerationY = read_word_2c(0x3d);
-            var accelerationZ = read_word_2c(0x3f);
+            var xAccelerationScaled = xAcceleration / 16384.0;
+            var yAccelerationScaled = yAcceleration / 16384.0;
+            var zAccelerationScaled = zAcceleration / 16384.0;
 
-            var accelerationXScaled = acceleartionX / 16384.0;
-            var accelerationYScaled = accelerationY / 16384.0;
-            var acceleartionZScaled = accelerationZ / 16384.0;
-
-            return new TiltResult
+            return new RotationResult
             {
-                GyroscopeX = Math.Round(gyroscopeX / 131d, 2),
-                GyroscopeY = Math.Round(gyroscopeY / 131d, 2),
-                GyroscopeZ = Math.Round(gyroscopeZ / 131d, 2),
-                AccelerationX = Math.Round(accelerationXScaled, 2),
-                AccelerationY = Math.Round(accelerationYScaled, 2),
-                AccelerationZ = Math.Round(acceleartionZScaled, 2),
-                RotationX = Math.Round(get_x_rotation(accelerationXScaled, accelerationYScaled, acceleartionZScaled), 2),
-                RotationY = Math.Round(get_y_rotation(accelerationXScaled, accelerationYScaled, acceleartionZScaled), 2)
+                XRotation = Math.Round(GetXRotation(xAccelerationScaled, yAccelerationScaled, zAccelerationScaled), 2),
+                YRotation = Math.Round(GetYRotation(xAccelerationScaled, yAccelerationScaled, zAccelerationScaled), 2)
             };
         }
 
-        private static byte read_byte(byte reg)
+        private static byte ReadByte(byte reg)
         {
 
             Span<byte> outArray = stackalloc byte[1];
@@ -57,18 +47,18 @@ namespace Icarus.Sensors.Tilt
 
         }
 
-        private static ushort read_word(byte reg)
+        private static ushort ReadWord(byte reg)
         {
-            var h = read_byte(reg);
+            var h = ReadByte(reg);
             reg++;
-            var l = read_byte(reg);
+            var l = ReadByte(reg);
             var value = (h << 8) + l;
             return (ushort)value;
         }
 
-        private static short read_word_2c(byte reg)
+        private static short ReadWord2C(byte reg)
         {
-            var value = read_word(reg);
+            var value = ReadWord(reg);
             return (short)value;
         }
 
@@ -77,17 +67,16 @@ namespace Icarus.Sensors.Tilt
             return Math.Sqrt((a * a) + (b * b));
         }
 
-        private static double get_y_rotation(double x, double y, double z)
+        private static double GetYRotation(double x, double y, double z)
         {
             var radians = Math.Atan2(x, Dist(y, z));
             return -((180 / Math.PI) * radians);
         }
 
-        private static double get_x_rotation(double x, double y, double z)
+        private static double GetXRotation(double x, double y, double z)
         {
             var radians = Math.Atan2(y, Dist(x, z));
             return (180 / Math.PI) * radians;
         }
-
     }
 }

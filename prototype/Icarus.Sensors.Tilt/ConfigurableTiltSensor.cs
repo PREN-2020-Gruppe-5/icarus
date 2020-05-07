@@ -9,12 +9,12 @@
             this.tiltConfiguration = tiltConfiguration;
         }
 
-        public RotationResult GetTilt()
+        public RotationResult GetRotationResult()
         {
             return new RotationResult
             {
-                RotationX = this.tiltConfiguration.X,
-                RotationY = this.tiltConfiguration.Y
+                XRotation = this.tiltConfiguration.X,
+                YRotation = this.tiltConfiguration.Y
             };
         }
     }

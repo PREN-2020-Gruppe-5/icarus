@@ -19,14 +19,14 @@ namespace Icarus.Sensors.Tilt
 
         private readonly Random random = new Random();
 
-        public RotationResult GetTilt()
+        public RotationResult GetRotationResult()
         {
             return new RotationResult
             {
                 // ranging from -60 to 60 degrees where 0 degress is flat. 45 deg is going uphill and -45 deg is going downhill
-                RotationX = this.random.Next(this.minDegreesX, this.maxDegreesX),
+                XRotation = this.random.Next(this.minDegreesX, this.maxDegreesX),
                 // same as X but -45 means right side is higher than left side. +45 means left side is higher than right side
-                RotationY = this.random.Next(this.minDegreesY, this.maxDegreesY)
+                YRotation = this.random.Next(this.minDegreesY, this.maxDegreesY)
             };
         }
     }

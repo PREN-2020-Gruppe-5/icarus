@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Icarus.Sensors.Tilt
+﻿namespace Icarus.Sensors.Tilt
 {
     public class TiltResult
     {
+        public TiltResult(OrientationInformation orientationInformation)
+        {
+            this.OrientationInformation = orientationInformation;
+        }
 
+        public OrientationInformation OrientationInformation { get; }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface ITiltSensor
     {
-        RotationResult GetTilt();
+        RotationResult GetRotationResult();
     }
 }

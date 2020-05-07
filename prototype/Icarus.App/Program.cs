@@ -96,9 +96,9 @@ namespace Icarus.App
             //        ConsoleHelper.WriteDouble("RPM Right", hallEffectSensorService.GetWheelRpm(WheelLocation.Right));
             //        ConsoleHelper.WriteDouble("RPM Left", hallEffectSensorService.GetWheelRpm(WheelLocation.Left));
 
-            //        var tilt = tiltSensor.GetTilt();
-            //        ConsoleHelper.WriteDouble("Rotation X", tilt.RotationX);
-            //        ConsoleHelper.WriteDouble("Rotation Y", tilt.RotationY);
+            //        var tilt = tiltSensor.GetRotationResult();
+            //        ConsoleHelper.WriteDouble("Rotation X", tilt.XRotation);
+            //        ConsoleHelper.WriteDouble("Rotation Y", tilt.YRotation);
 
             //        await Task.Delay(200, cancellationTokenSource.Token);
             //    }

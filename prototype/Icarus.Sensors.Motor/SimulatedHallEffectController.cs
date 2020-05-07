@@ -22,12 +22,12 @@ namespace Icarus.Sensors.HallEffect
 
         public int GetWheelRpm(WheelLocation wheel)
         {
-            var tiltResult = this.tiltSensor.GetTilt();
+            var rotationResult = this.tiltSensor.GetRotationResult();
             var rpm = ConvertPwmToRpm(wheel == WheelLocation.Left ? this.motorActor.GetLeft() : this.motorActor.GetRight());
 
             // using a simulated formula to calcualte actual RPM for example when climbing an obstacle
             // 45 degrees = only 20% of normal speed. angles over 55 degrees are not climbable and speed is 0
-            var actualRpm = (int) (rpm * (1 - (tiltResult.RotationX / 45 * 0.8)));
+            var actualRpm = (int) (rpm * (1 - (rotationResult.XRotation / 45 * 0.8)));
 
             // can't go negative speed when driving forward --> friction too high and therefore speed = 0
             return actualRpm > 0 ? actualRpm : 0;

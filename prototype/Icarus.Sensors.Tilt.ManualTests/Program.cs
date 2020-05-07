@@ -55,8 +55,8 @@ namespace Icarus.Sensors.Tilt.ManualTests
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
-            var tiltResult = tiltSensor.GetTilt();
-            TestTiltSensor(tiltResult, new RotationResult { RotationX = 45, RotationY = -45 }, toleranceDegrees);
+            var rotationResult = tiltSensor.GetRotationResult();
+            TestTiltSensor(rotationResult, new RotationResult { XRotation = 45, YRotation = -45 }, toleranceDegrees);
         }
 
         private static void TestTiltSensorRightSideUp45Degrees(ITiltSensor tiltSensor, int toleranceDegrees)
@@ -67,8 +67,8 @@ namespace Icarus.Sensors.Tilt.ManualTests
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
-            var tiltResult = tiltSensor.GetTilt();
-            TestTiltSensor(tiltResult, new RotationResult { RotationX = 0, RotationY = -45 }, toleranceDegrees);
+            var rotationResult = tiltSensor.GetRotationResult();
+            TestTiltSensor(rotationResult, new RotationResult { XRotation = 0, YRotation = -45 }, toleranceDegrees);
         }
 
         private static void TestTiltSensorLeftSideUp45Degrees(ITiltSensor tiltSensor, int toleranceDegrees)
@@ -79,8 +79,8 @@ namespace Icarus.Sensors.Tilt.ManualTests
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
-            var tiltResult = tiltSensor.GetTilt();
-            TestTiltSensor(tiltResult, new RotationResult { RotationX = 0, RotationY = 45 }, toleranceDegrees);
+            var rotationResult = tiltSensor.GetRotationResult();
+            TestTiltSensor(rotationResult, new RotationResult { XRotation = 0, YRotation = 45 }, toleranceDegrees);
         }
 
         private static void TestTiltSensorFrontUp45Degrees(ITiltSensor tiltSensor, int toleranceDegrees)
@@ -91,8 +91,8 @@ namespace Icarus.Sensors.Tilt.ManualTests
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
-            var tiltResult = tiltSensor.GetTilt();
-            TestTiltSensor(tiltResult, new RotationResult { RotationX = 45, RotationY = 0 }, toleranceDegrees);
+            var rotationResult = tiltSensor.GetRotationResult();
+            TestTiltSensor(rotationResult, new RotationResult { XRotation = 45, YRotation = 0 }, toleranceDegrees);
         }
 
         private static void TestTiltSensorBackUp45Degrees(ITiltSensor tiltSensor, int toleranceDegrees)
@@ -103,8 +103,8 @@ namespace Icarus.Sensors.Tilt.ManualTests
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
-            var tiltResult = tiltSensor.GetTilt();
-            TestTiltSensor(tiltResult, new RotationResult { RotationX = -45, RotationY = 0 }, toleranceDegrees);
+            var rotationResult = tiltSensor.GetRotationResult();
+            TestTiltSensor(rotationResult, new RotationResult { XRotation = -45, YRotation = 0 }, toleranceDegrees);
         }
 
 
@@ -116,15 +116,15 @@ namespace Icarus.Sensors.Tilt.ManualTests
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
-            var tiltResult = tiltSensor.GetTilt();
-            TestTiltSensor(tiltResult, new RotationResult { RotationX = 0, RotationY = 0 }, toleranceDegrees);
+            var rotationResult = tiltSensor.GetRotationResult();
+            TestTiltSensor(rotationResult, new RotationResult { XRotation = 0, YRotation = 0 }, toleranceDegrees);
         }
 
         private static void TestTiltSensor(RotationResult actualRotationResult, RotationResult expectedRotationResult, double toleranceDegrees)
         {
             // X axis
-            Console.WriteLine($"Expected rotation X: {expectedRotationResult.RotationX}°. Actual rotation X: {actualRotationResult.RotationX}°. Tolerance: +{toleranceDegrees}/-{toleranceDegrees}");
-            if (actualRotationResult.RotationX <= expectedRotationResult.RotationX + toleranceDegrees && actualRotationResult.RotationX >= expectedRotationResult.RotationX - toleranceDegrees)
+            Console.WriteLine($"Expected rotation X: {expectedRotationResult.XRotation}°. Actual rotation X: {actualRotationResult.XRotation}°. Tolerance: +{toleranceDegrees}/-{toleranceDegrees}");
+            if (actualRotationResult.XRotation <= expectedRotationResult.XRotation + toleranceDegrees && actualRotationResult.XRotation >= expectedRotationResult.XRotation - toleranceDegrees)
             {
                 ConsoleHelper.WriteLine($"Test {_testNumber} 'rotation X' passed", ConsoleColor.Green);
             }
@@ -134,8 +134,8 @@ namespace Icarus.Sensors.Tilt.ManualTests
             }
 
             // Y axis
-            Console.WriteLine($"Expected rotation Y: {expectedRotationResult.RotationY}°. Actual rotation Y: {actualRotationResult.RotationY}°. Tolerance: +{toleranceDegrees}/-{toleranceDegrees}");
-            if (actualRotationResult.RotationY <= expectedRotationResult.RotationY + toleranceDegrees && actualRotationResult.RotationY >= expectedRotationResult.RotationY - toleranceDegrees)
+            Console.WriteLine($"Expected rotation Y: {expectedRotationResult.YRotation}°. Actual rotation Y: {actualRotationResult.YRotation}°. Tolerance: +{toleranceDegrees}/-{toleranceDegrees}");
+            if (actualRotationResult.YRotation <= expectedRotationResult.YRotation + toleranceDegrees && actualRotationResult.YRotation >= expectedRotationResult.YRotation - toleranceDegrees)
             {
                 ConsoleHelper.WriteLine($"Test {_testNumber} 'rotation Y' passed", ConsoleColor.Green);
             }
