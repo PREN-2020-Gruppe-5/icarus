@@ -17,7 +17,7 @@ namespace Icarus.Sensors.Tof.Tests
         [InlineData(499.999999, 499.999999, DistanceInformation.TrafficConeDetected)]
         [InlineData(500, 500, DistanceInformation.Void)]
         [InlineData(1500, 1500, DistanceInformation.Void)]
-        public void TofController_GetTofResult_ReturnsExpectedTofResult(double tofSensorDistanceInMillimeters, double expectedDistanceInMillimeters, DistanceInformation expecteDistanceInformation)
+        public void TofController_GetTofResult_ReturnsExpectedTofResult(double tofSensorDistanceInMillimeters, double expectedDistanceInMillimeters, DistanceInformation expectedDistanceInformation)
         {
             // Arrange
             var tofSensor = new Mock<ITofSensor>();
@@ -30,7 +30,7 @@ namespace Icarus.Sensors.Tof.Tests
 
             // Assert
             result.DistanceInMillimeters.Should().Be(expectedDistanceInMillimeters);
-            result.DistanceInformation.Should().Be(expecteDistanceInformation);
+            result.DistanceInformation.Should().Be(expectedDistanceInformation);
         }
     }
 }
