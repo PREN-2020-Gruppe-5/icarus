@@ -19,9 +19,9 @@ namespace Icarus.Sensors.Tilt
 
         private readonly Random random = new Random();
 
-        public TiltResult GetTilt()
+        public RotationResult GetTilt()
         {
-            return new TiltResult
+            return new RotationResult
             {
                 // ranging from -60 to 60 degrees where 0 degress is flat. 45 deg is going uphill and -45 deg is going downhill
                 RotationX = this.random.Next(this.minDegreesX, this.maxDegreesX),

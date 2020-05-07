@@ -2,6 +2,6 @@
 {
     public interface ITiltController
     {
-
+        TiltResult GetTiltResult();
     }
 }

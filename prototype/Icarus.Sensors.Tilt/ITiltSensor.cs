@@ -2,6 +2,6 @@
 {
     public interface ITiltSensor
     {
-        TiltResult GetTilt();
+        RotationResult GetTilt();
     }
 }

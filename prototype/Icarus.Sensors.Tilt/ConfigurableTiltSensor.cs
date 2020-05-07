@@ -9,9 +9,9 @@
             this.tiltConfiguration = tiltConfiguration;
         }
 
-        public TiltResult GetTilt()
+        public RotationResult GetTilt()
         {
-            return new TiltResult
+            return new RotationResult
             {
                 RotationX = this.tiltConfiguration.X,
                 RotationY = this.tiltConfiguration.Y
