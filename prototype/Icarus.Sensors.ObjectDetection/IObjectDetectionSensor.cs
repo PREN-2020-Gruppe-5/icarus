@@ -7,8 +7,10 @@ namespace Icarus.Sensors.ObjectDetection
 {
     public interface IObjectDetectionSensor
     {
-        List<DetectedObject> GetDetectedObjectsFromCamera();
-        List<DetectedObject> GetDetectedObjectsFromVideo(string videoFileName);
-        List<DetectedObject> GetDetectedObjectsFromImage(string imageFileName);
+        Task RunDetectionFromCamera();
+        Task RunDetectionFromVideo(string videoFileName);
+        Task RunDetectionFromImage(string imageFileName);
+
+        List<DetectedObject> GetDetectedObjects();
     }
 }

@@ -16,7 +16,7 @@ namespace Icarus.Sensors.ObjectDetection.Tests
             // Arrange
             var objectDetectionSensor = new Mock<IObjectDetectionSensor>();
             var detectedObjects = new List<DetectedObject>();
-            objectDetectionSensor.Setup(_ => _.GetDetectedObjectsFromCamera()).Returns(detectedObjects);
+            objectDetectionSensor.Setup(_ => _.GetDetectedObjects()).Returns(detectedObjects);
 
             var testee = new ObjectDetectionController(objectDetectionSensor.Object);
 
@@ -36,7 +36,7 @@ namespace Icarus.Sensors.ObjectDetection.Tests
             {
                 new DetectedObject{Name = "Banana", Confidence = 1, Location = new Rectangle()}
             };
-            objectDetectionSensor.Setup(_ => _.GetDetectedObjectsFromCamera()).Returns(detectedObjects);
+            objectDetectionSensor.Setup(_ => _.GetDetectedObjects()).Returns(detectedObjects);
 
             var testee = new ObjectDetectionController(objectDetectionSensor.Object);
 
@@ -56,7 +56,7 @@ namespace Icarus.Sensors.ObjectDetection.Tests
             {
                 new DetectedObject{Name = TrafficConeName, Confidence = 0.59, Location = new Rectangle()}
             };
-            objectDetectionSensor.Setup(_ => _.GetDetectedObjectsFromCamera()).Returns(detectedObjects);
+            objectDetectionSensor.Setup(_ => _.GetDetectedObjects()).Returns(detectedObjects);
 
             var testee = new ObjectDetectionController(objectDetectionSensor.Object);
 
@@ -74,7 +74,7 @@ namespace Icarus.Sensors.ObjectDetection.Tests
             var objectDetectionSensor = new Mock<IObjectDetectionSensor>();
             var validTrafficCone = new DetectedObject { Name = TrafficConeName, Confidence = 0.6, Location = new Rectangle() };
             var detectedObjects = new List<DetectedObject> { validTrafficCone };
-            objectDetectionSensor.Setup(_ => _.GetDetectedObjectsFromCamera()).Returns(detectedObjects);
+            objectDetectionSensor.Setup(_ => _.GetDetectedObjects()).Returns(detectedObjects);
 
             var testee = new ObjectDetectionController(objectDetectionSensor.Object);
 
@@ -94,7 +94,7 @@ namespace Icarus.Sensors.ObjectDetection.Tests
             var mediumTrafficCone = new DetectedObject { Name = TrafficConeName, Confidence = 0.7, Location = new Rectangle { Height = 5, Width = 10 } };
             var largeTrafficCone = new DetectedObject { Name = TrafficConeName, Confidence = 0.6, Location = new Rectangle { Height = 10, Width = 15 } };
             var detectedObjects = new List<DetectedObject> { smallTrafficCone, largeTrafficCone, mediumTrafficCone };
-            objectDetectionSensor.Setup(_ => _.GetDetectedObjectsFromCamera()).Returns(detectedObjects);
+            objectDetectionSensor.Setup(_ => _.GetDetectedObjects()).Returns(detectedObjects);
 
             var testee = new ObjectDetectionController(objectDetectionSensor.Object);
 

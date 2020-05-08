@@ -16,30 +16,19 @@ namespace Icarus.Sensors.ObjectDetection
         private const string CfgFilePath = "cfg/yolov3-tiny-traffic_cone.cfg";
         private const string WeightsFilePath = "yolov3-tiny-obj_final.weights";
 
-        public List<DetectedObject> GetDetectedObjectsFromVideo(string videoFileName = DefaultVideoFileName)
+        private List<DetectedObject> detectedObjects = new List<DetectedObject>();
+
+        public List<DetectedObject> GetDetectedObjects()
         {
-            var arguments = $"detector demo {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output {videoFileName}";
-            return RunDetectionAsync(arguments).GetAwaiter().GetResult();
+            return detectedObjects;
         }
 
-        public List<DetectedObject> GetDetectedObjectsFromImage(string imageFileName)
-        {
-            var arguments = $"detector test {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output {imageFileName}";
-            return RunDetectionAsync(arguments).GetAwaiter().GetResult();
-        }
-
-        public List<DetectedObject> GetDetectedObjectsFromCamera()
-        {
-            var arguments = $"detector test {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output";
-            return RunDetectionAsync(arguments).GetAwaiter().GetResult();
-        }
-
-        private async Task<List<DetectedObject>> RunDetectionAsync(string arguments)
+        private async Task RunDetectionAsync(string arguments)
         {
             var darknetYolo = Cli.Wrap("/app/darknet/darknet").WithArguments(arguments)
                 .WithWorkingDirectory("/app/darknet");
 
-            var detectedObjects = new List<DetectedObject>();
+            var objects = new List<DetectedObject>();
 
             await foreach (var cmdEvent in darknetYolo.ListenAsync())
             {
@@ -53,28 +42,46 @@ namespace Icarus.Sensors.ObjectDetection
                     var numbers = Regex.Matches(stdOut.Text, "[0-9]{1,4}").OfType<Match>()
                         .Select(p => Convert.ToInt32(p.Value)).ToArray();
 
-                    var confidence = (double) numbers[0] / 100;
+                    var confidence = (double)numbers[0] / 100;
                     var x = numbers[1];
                     var y = numbers[2];
                     var width = numbers[3];
                     var height = numbers[4];
 
-                    detectedObjects.Add(new DetectedObject
-                        {Name = "Traffic_Cone", Confidence = confidence, Location = new Rectangle(x, y, width, height)});
+                    objects.Add(new DetectedObject
+                    { Name = "Traffic_Cone", Confidence = confidence, Location = new Rectangle(x, y, width, height) });
 
                 }
-                else if (detectedObjects.Any())
+                else if (objects.Any())
                 {
-                    detectedObjects.Clear();
+                    detectedObjects = objects;
+                    objects.Clear();
                 }
             }
 
-            if (detectedObjects.Any())
+            if (objects.Any())
             {
-                detectedObjects.Clear();
+                detectedObjects = objects;
+                objects.Clear();
             }
+        }
+        
+        public async Task RunDetectionFromCamera()
+        {
+            var arguments = $"detector test {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output";
+            await RunDetectionAsync(arguments);
+        }
 
-            return detectedObjects;
+        public async Task RunDetectionFromVideo(string videoFileName)
+        {
+            var arguments = $"detector demo {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output {videoFileName}";
+            await RunDetectionAsync(arguments);
+        }
+
+        public async Task RunDetectionFromImage(string imageFileName)
+        {
+            var arguments = $"detector test {DataFilePath} {CfgFilePath} {WeightsFilePath} -dont_show -ext_output {imageFileName}";
+            await RunDetectionAsync(arguments);
         }
     }
 }

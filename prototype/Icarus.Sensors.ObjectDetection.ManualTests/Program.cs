@@ -38,8 +38,8 @@ namespace Icarus.Sensors.ObjectDetection.ManualTests
 #else
             IObjectDetectionSensor objectDetectionSensor = null;
 #endif
-
-            var result = objectDetectionSensor.GetDetectedObjectsFromImage("traffic_cone_1.png");
+            await objectDetectionSensor.RunDetectionFromImage("traffic_cone_1.png");
+            var result = objectDetectionSensor.GetDetectedObjects();
 
             if (result != null && result.Count == 1 && result.All(p => p.Confidence >= 0.8))
             {
@@ -50,7 +50,8 @@ namespace Icarus.Sensors.ObjectDetection.ManualTests
                 ConsoleHelper.WriteLine("Test 1 failed. Expected 1 Object with >= 0.8 confidence", ConsoleColor.Red);
             }
 
-            result = objectDetectionSensor.GetDetectedObjectsFromImage("traffic_cone_2.png");
+            await objectDetectionSensor.RunDetectionFromImage("traffic_cone_2.png");
+            result = objectDetectionSensor.GetDetectedObjects();
 
             if (result.Count == 8 && result.All(p => p.Confidence >= 0.3))
             {
@@ -61,7 +62,8 @@ namespace Icarus.Sensors.ObjectDetection.ManualTests
                 ConsoleHelper.WriteLine("Test 2 failed. Expected 8 Objects with >= 0.3 confidence", ConsoleColor.Red);
             }
 
-            result = objectDetectionSensor.GetDetectedObjectsFromImage("traffic_cone_3.png");
+            await objectDetectionSensor.RunDetectionFromImage("traffic_cone_3.png");
+            result = objectDetectionSensor.GetDetectedObjects();
 
             if (result.Count == 1 && result.All(p => p.Confidence >= 0.9))
             {
@@ -72,7 +74,8 @@ namespace Icarus.Sensors.ObjectDetection.ManualTests
                 ConsoleHelper.WriteLine("Test 3 failed. Expected 1 Object with >= 0.9 confidence", ConsoleColor.Red);
             }
 
-            result = objectDetectionSensor.GetDetectedObjectsFromImage("traffic_cone_4.png");
+            await objectDetectionSensor.RunDetectionFromImage("traffic_cone_4.png");
+            result = objectDetectionSensor.GetDetectedObjects();
             
             if (result.Count == 1 && result.All(p => p.Confidence >= 0.3))
             {

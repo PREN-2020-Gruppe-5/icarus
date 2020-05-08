@@ -8,22 +8,24 @@ namespace Icarus.Actuators.Motor
     public class MotorController : IMotorController
     {
         private readonly IDirectional<IMotorActor> motorActors;
+        private readonly IMotorSpeedConverter motorSpeedConverter;
         private MotorSpeed requestedSpeed = 0;
 
-        public MotorController(IDirectional<IMotorActor> motorActors)
+        public MotorController(IDirectional<IMotorActor> motorActors, IMotorSpeedConverter motorSpeedConverter)
         {
             this.motorActors = motorActors;
+            this.motorSpeedConverter = motorSpeedConverter;
         }
 
         public double GetRequestedSpeedDutyCycle()
         {
-            return GetDutyCycleFromSpeed(requestedSpeed);
+            return motorSpeedConverter.GetDutyCycleFromSpeed(requestedSpeed);
         }
 
         public void SetForward(MotorSpeed motorSpeed)
         {
             requestedSpeed = motorSpeed;
-            var requestedSpeedDutyCycle = GetDutyCycleFromSpeed(motorSpeed);
+            var requestedSpeedDutyCycle = motorSpeedConverter.GetDutyCycleFromSpeed(motorSpeed);
             motorActors.Right.SetSpeed(requestedSpeedDutyCycle);
             motorActors.Left.SetSpeed(requestedSpeedDutyCycle);
         }
@@ -50,23 +52,5 @@ namespace Icarus.Actuators.Motor
 
             Stop();
         }
-
-        private double GetDutyCycleFromSpeed(MotorSpeed motorSpeed)
-        {
-            switch (motorSpeed)
-            {
-                case MotorSpeed.Slow:
-                    return 0.2;
-                case MotorSpeed.Medium:
-                    return 0.5;
-                case MotorSpeed.Fast:
-                    return 0.8;
-                case MotorSpeed.Maximum:
-                    return 1;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(motorSpeed), motorSpeed, null);
-            }
-        }
-
     }
 }
