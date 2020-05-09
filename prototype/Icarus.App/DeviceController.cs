@@ -75,11 +75,15 @@ namespace Icarus.App
                 nearestDetectedObject = this.objectDetectionController.GetNearestDetectedTrafficCone();
             }
 
-            while (this.GetBboxHeightPercentage(nearestDetectedObject) < 0.33)
+            // bbox size can vary quite much frame by frame. so check the average size over 6 measurements
+            // use a circular buffer initialized with zeros so it requires all 6 measurements to be done
+            var circularBuffer = new CircularBuffer<double>(6, Enumerable.Repeat(0d, 6).ToArray());
+            while (circularBuffer.Average() < 0.33)
             {
                 // TODO: maybe add delay so that we don't flood motors with signals
                 this.motorController.SetForward(MotorSpeed.Medium);
                 nearestDetectedObject = this.objectDetectionController.GetNearestDetectedTrafficCone();
+                circularBuffer.PushFront(this.GetBboxHeightPercentage(nearestDetectedObject));
             }
 
             // Ausrichten 33% +/- 2%
