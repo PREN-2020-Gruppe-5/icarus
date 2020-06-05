@@ -31,14 +31,14 @@ Scenario: The vehicle is on an obstacle or on the ground - object detection reac
 		And the object detection returns values which triggers reaction
 	Then reaction is triggered
 
-Scenario: The vehicle is on an obstacle or on the ground
+Scenario: The vehicle is on an obstacle or on the ground - tof and object detection reaction
 	Given the vehicle is driving on the parcours
 	When the tilt sensor measures horizonally
 		And the tof sensor returns values which triggers reaction
 		And the object detection returns values which triggers reaction
 	Then reaction is triggered
 
-Scenario: The vehicle is on an obstacle or on the ground
+Scenario: The vehicle is on an obstacle or on the ground - no reaction
 	Given the vehicle is driving on the parcours
 	When the tilt sensor measures horizonally
 		And the tof sensor returns values which does not trigger reaction
