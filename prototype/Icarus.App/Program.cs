@@ -12,6 +12,7 @@ namespace Icarus.App
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var deviceController = serviceProvider.GetService<DeviceController>();
+            deviceController.Start();
 
             //// check for running software on linux arm64 (nvidia jetson). if so, register real sensor drivers
             //if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.OSArchitecture == Architecture.Arm64)

@@ -28,6 +28,11 @@ namespace Icarus.App
             this.tofController = tofController;
         }
 
+        public void Start()
+        {
+
+        }
+
         public async Task<DetectedObject> FaceNearestTrafficCone()
         {
             var detectedObjects = new Dictionary<int, DetectedObject>();
