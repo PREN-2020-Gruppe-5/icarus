@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Icarus.Actuators.Motor;
 using Icarus.Common;
+using Icarus.Sensors.Button;
 using Icarus.Sensors.HallEffect;
 using Icarus.Sensors.ObjectDetection;
 using Icarus.Sensors.Tilt;
@@ -18,18 +19,26 @@ namespace Icarus.App
         private readonly IObjectDetectionController objectDetectionController;
         private readonly ITiltController tiltController;
         private readonly ITofController tofController;
+        private readonly IButtonController buttonController;
 
-        public DeviceController(IMotorController motorController, IHallEffectController hallEffectController, IObjectDetectionController objectDetectionController, ITiltController tiltController, ITofController tofController)
+        public DeviceController(IMotorController motorController, IHallEffectController hallEffectController, IObjectDetectionController objectDetectionController, ITiltController tiltController, ITofController tofController, IButtonController buttonController)
         {
             this.motorController = motorController;
             this.hallEffectController = hallEffectController;
             this.objectDetectionController = objectDetectionController;
             this.tiltController = tiltController;
             this.tofController = tofController;
+            this.buttonController = buttonController;
         }
 
         public async Task Start()
         {
+            // wait for start button press.
+            while (!this.buttonController.GetButtonPressed())
+            {
+                await Task.Delay(1);
+            }
+
             var laps = 0;
             var previousValue = false;
 
@@ -56,6 +65,8 @@ namespace Icarus.App
 
                 laps++;
             }
+
+            motorController.Stop();
         }
 
         public async Task<DetectedObject> FaceNearestTrafficCone()

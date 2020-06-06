@@ -13,13 +13,7 @@ namespace Icarus.App
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var deviceController = serviceProvider.GetService<DeviceController>();
-            var buttonController = serviceProvider.GetService<ButtonController>();
-
-            while (!buttonController.GetButtonPressed())
-            {
-                await Task.Delay(1);
-            }
-
+            
             await deviceController.Start();
         }
     }
