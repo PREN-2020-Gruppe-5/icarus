@@ -29,7 +29,7 @@ namespace Icarus.Scenarios
         public void GivenTheVehicleIsDrivingOnTheParcours()
         {
             var deviceController = this.serviceProvider.GetService<DeviceController>();
-            deviceController.Start();
+            deviceController.Start().RunSynchronously();
 
             var motorController = (MotorControllerSimulator)this.serviceProvider.GetService<IMotorController>();
             motorController.SetForward(0.3, 0.3);
@@ -81,7 +81,7 @@ namespace Icarus.Scenarios
         public void WhenTheObjectDetectionReturnsValuesWhichTriggersReaction()
         {
             var objectDetectionSensor = (ObjectDetectionSensorSimulator)this.serviceProvider.GetService<IObjectDetectionSensor>();
-            var detectedObjectOutOfLeftRange = new DetectedObject{Name = "Traffic_Cone_Vertical", Confidence = 0.8, Location = new Rectangle(250, 50, 50, 70)};
+            var detectedObjectOutOfLeftRange = new DetectedObject{Name = "trafficcone", Confidence = 0.8, Location = new Rectangle(250, 50, 50, 70)};
             objectDetectionSensor.SetDetectedObjects(new List<DetectedObject>{ detectedObjectOutOfLeftRange });
         }
 
@@ -89,7 +89,7 @@ namespace Icarus.Scenarios
         public void WhenTheObjectDetectionReturnsValuesWhichDoesNotTriggerReaction()
         {
             var objectDetectionSensor = (ObjectDetectionSensorSimulator)this.serviceProvider.GetService<IObjectDetectionSensor>();
-            var detectedObjectInLeftRange = new DetectedObject { Name = "Traffic_Cone_Vertical", Confidence = 0.8, Location = new Rectangle(50, 50, 50, 70) };
+            var detectedObjectInLeftRange = new DetectedObject { Name = "trafficcone", Confidence = 0.8, Location = new Rectangle(50, 50, 50, 70) };
             objectDetectionSensor.SetDetectedObjects(new List<DetectedObject> { detectedObjectInLeftRange });
         }
 
@@ -97,7 +97,7 @@ namespace Icarus.Scenarios
         public void WhenTheObjectDetectionReturnsValuesWhichTriggersAStop()
         {
             var objectDetectionSensor = (ObjectDetectionSensorSimulator)this.serviceProvider.GetService<IObjectDetectionSensor>();
-            var detectedObjectInLeftRange = new DetectedObject { Name = "Traffic_Cone_Horizontal", Confidence = 0.8, Location = new Rectangle(50, 50, 50, 70) };
+            var detectedObjectInLeftRange = new DetectedObject { Name = "trafficcone_horizontal", Confidence = 0.8, Location = new Rectangle(50, 50, 50, 70) };
             objectDetectionSensor.SetDetectedObjects(new List<DetectedObject> { detectedObjectInLeftRange });
         }
 

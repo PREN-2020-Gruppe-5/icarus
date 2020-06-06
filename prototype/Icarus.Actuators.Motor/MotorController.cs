@@ -44,7 +44,6 @@ namespace Icarus.Actuators.Motor
 
         public async Task TurnLeftAsync()
         {
-            // not fully implemented. needs some math first. idea: both in different directions with low speed for 500ms
             motorActors.Right.SetSpeed(0.2);
             motorActors.Right.SetSpeed(-0.2);
 

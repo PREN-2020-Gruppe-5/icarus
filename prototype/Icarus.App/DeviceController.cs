@@ -28,9 +28,34 @@ namespace Icarus.App
             this.tofController = tofController;
         }
 
-        public void Start()
+        public async Task Start()
         {
+            var laps = 0;
+            var previousValue = false;
 
+            while (laps <= 3)
+            {
+                while (true)
+                {
+                    var nearestTrafficcone = await FaceNearestTrafficCone();
+                    await ApproachNearestVisibleTrafficCone(nearestTrafficcone);
+
+                    if (!previousValue && this.objectDetectionController.GetNearestDetectedTrafficConeHorizontal() != null)
+                    {
+                        // rising edge - seeing it first in this round
+                        previousValue = true;
+                        break;
+                    }
+
+                    if(previousValue && this.objectDetectionController.GetNearestDetectedTrafficConeHorizontal() == null)
+                    {
+                        previousValue = false;
+                        // driving past - do nothing except setting previous false
+                    }
+                }
+
+                laps++;
+            }
         }
 
         public async Task<DetectedObject> FaceNearestTrafficCone()
@@ -85,7 +110,6 @@ namespace Icarus.App
             var circularBuffer = new CircularBuffer<double>(6, Enumerable.Repeat(0d, 6).ToArray());
             while (circularBuffer.Average() < 0.33)
             {
-                // TODO: maybe add delay so that we don't flood motors with signals
                 this.motorController.SetForward(MotorSpeed.Medium);
                 nearestDetectedObject = this.objectDetectionController.GetNearestDetectedTrafficCone();
                 circularBuffer.PushFront(this.GetBboxHeightPercentage(nearestDetectedObject));
@@ -100,7 +124,6 @@ namespace Icarus.App
 
             while (this.tofController.GetTofResult().DistanceInformation != DistanceInformation.TrafficConeDetected)
             {
-                // TODO: maybe add delay so that we don't flood motors with signals
                 this.motorController.SetForward(MotorSpeed.Medium);
             }
 
@@ -110,7 +133,6 @@ namespace Icarus.App
 
             while (this.tiltController.GetTiltResult().OrientationInformation != OrientationInformation.Horizontal)
             {
-                // TODO: maybe add delay
                 this.motorController.SetForward(MotorSpeed.Slow);
             }
 

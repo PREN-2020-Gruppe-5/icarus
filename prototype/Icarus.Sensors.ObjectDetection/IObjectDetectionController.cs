@@ -3,5 +3,6 @@
     public interface IObjectDetectionController
     {
         DetectedObject GetNearestDetectedTrafficCone();
+        DetectedObject GetNearestDetectedTrafficConeHorizontal();
     }
 }

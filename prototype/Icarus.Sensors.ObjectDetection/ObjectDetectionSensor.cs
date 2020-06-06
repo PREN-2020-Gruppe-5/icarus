@@ -12,6 +12,8 @@ namespace Icarus.Sensors.ObjectDetection
     public class ObjectDetectionSensor : IObjectDetectionSensor
     {
         private const string DefaultVideoFileName = "traffic_cones.mp4";
+        private const string TrafficCone = "trafficcone";
+        private const string TrafficConeHorizontal = "trafficcone_horizontal";
         private const string DataFilePath = "data/obj.data";
         private const string CfgFilePath = "cfg/yolov3-tiny-traffic_cone.cfg";
         private const string WeightsFilePath = "yolov3-tiny-obj_final.weights";
@@ -37,7 +39,18 @@ namespace Icarus.Sensors.ObjectDetection
                     continue;
                 }
 
-                if (stdOut.Text.Contains("trafficcone"))
+                var name = string.Empty;
+
+                if (stdOut.Text.Contains(TrafficConeHorizontal))
+                {
+                    name = TrafficConeHorizontal;
+                }
+                else if(stdOut.Text.Contains(TrafficCone))
+                {
+                    name = TrafficCone;
+                }
+
+                if (stdOut.Text.Contains(TrafficCone))
                 {
                     var numbers = Regex.Matches(stdOut.Text, "[0-9]{1,4}").OfType<Match>()
                         .Select(p => Convert.ToInt32(p.Value)).ToArray();
@@ -49,7 +62,7 @@ namespace Icarus.Sensors.ObjectDetection
                     var height = numbers[4];
 
                     objects.Add(new DetectedObject
-                    { Name = "Traffic_Cone", Confidence = confidence, Location = new Rectangle(x, y, width, height) });
+                    { Name = name, Confidence = confidence, Location = new Rectangle(x, y, width, height) });
 
                 }
                 else if (objects.Any())

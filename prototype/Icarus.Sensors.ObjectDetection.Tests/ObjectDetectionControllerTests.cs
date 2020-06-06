@@ -8,7 +8,7 @@ namespace Icarus.Sensors.ObjectDetection.Tests
 {
     public class ObjectDetectionControllerTests
     {
-        private const string TrafficConeName = "Traffic_Cone";
+        private const string TrafficConeName = "trafficcone";
 
         [Fact]
         public void ObjectDetectionController_GetNearestDetectedTrafficCone_WithoutDetectedObjects_ReturnsNull()

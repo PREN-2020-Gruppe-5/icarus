@@ -26,16 +26,7 @@ namespace Icarus.Sensors.Tof
         public double GetDistanceInMillimeters()
         {
             var bytes = ReadRegVariable(RegAddr.ResultRangeStatus, 17);
-
-            var status = bytes[0];
-
-            //Console.WriteLine($"Status: {status:X}");
-
             var distance = bytes[13] << 8 | bytes[14];
-
-            //distance = (distance * 2011 + 0x0400) / 0x0800;
-
-            //Console.WriteLine($"Status {status:X} Distance: {distance}mm ({distance / 1000d}m)");
 
             return distance;
         }
